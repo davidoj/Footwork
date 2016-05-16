@@ -17,6 +17,8 @@ The present aim is a proof of concept of the combat system, to see if
 it's fun or just a pain in the arse to control. If it seems fun, I'll
 try to turn it into a proper game.
 
-It's not hosted anywhere at the moment, but you can download the files
+## Playing the game
+
+Footwork isn't hosted anywhere at the moment, but you can download the files
 and open index.html in your favourite browser if you want to give it a
 go.
