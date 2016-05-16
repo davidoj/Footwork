@@ -12,7 +12,7 @@ Game.Map = function(tiles, player) {
 	this.addEntityAtRandomPosition(player);
 	
 	for (i=0;i<3;i++) {
-		this.addEntityAtRandomPosition(new Game.Entity(Game.MonsterTemplate));
+		this.addEntityAtRandomPosition(new Game.Entity(Game.ConfusedWandererTemplate));
 	}
 
 }
