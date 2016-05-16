@@ -54,6 +54,15 @@ var Game = {
 		return this._display;
 	},
 
+	sendMessage: function(recipient, message, args) {
+		if (recipient.hasMixin("MessageRecipient")) {
+			if (args) {
+				message = vsprintf(message, args);
+			}
+			recipient.receiveMessage(message);
+		}
+	}
+		   
 
 };
 
