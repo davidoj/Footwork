@@ -81,12 +81,12 @@ Game.Screen.footworkScreen =  {
 		var hudBALx = this._map.getWidth() + this._hudBALoffset[0];
 		var hudBALy = this._hudBALoffset[1];
 		
-		// Show current balance with current penalty
+		// Show current balance with penalty
 		var disp_bal = Math.max(0,this._player._cbal-this._player._bal_penalty);
 
-		display.drawText(hudHPx,hudHPy,"Health:  " + this._player._chp + "/" + this._player._mhp);
-		display.drawText(hudBALx,hudBALy,"Balance: " + disp_bal + "/" + this._player._mbal);
-		display.drawText(hudBALx+9,hudBALy+1,this._player._cbal + " ");
+		display.drawText(hudHPx,hudHPy,vsprintf("Health:  %i/%i",[this._player._chp,this._player._mhp]));
+		display.drawText(hudBALx,hudBALy,vsprintf("Balance: %i/%i",[disp_bal,this._player._mbal]));
+		display.drawText(hudBALx+8,hudBALy+1,vsprintf("(%i/%i)",[this._player._cbal,this._player._mbal]));
 
 	},
 
