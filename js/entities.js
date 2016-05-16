@@ -11,7 +11,7 @@ Game.PlayerTemplate = {
 			  Game.Mixins.PlayerActor, 
 			  Game.Mixins.AbilityUser,
 			  Game.Mixins.Destructible,
-			  Game.Mixins.messageRecipient]
+			  Game.Mixins.MessageRecipient]
 }
 
 //Monster template
