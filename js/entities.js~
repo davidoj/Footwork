@@ -1,7 +1,6 @@
 
 //Player template
 Game.PlayerTemplate = {
-	name : 'Mighty Hero',
 	character : '↑',
 	foreground : 'white',
 	background : 'black',
@@ -12,12 +11,11 @@ Game.PlayerTemplate = {
 			  Game.Mixins.PlayerActor, 
 			  Game.Mixins.AbilityUser,
 			  Game.Mixins.Destructible,
-			  Game.Mixins.MessageRecipient]
+			  Game.Mixins.messageRecipient]
 }
 
 //Monster template
 Game.ConfusedWandererTemplate = {
-	name: 'Confused Wanderer',
 	character: '⇑',
 	foreground : 'white',
 	background : 'black',

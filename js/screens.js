@@ -5,9 +5,15 @@ Game.Screen = {};
 Game.Screen.footworkScreen =  {
 	_map:  null,
 	_player: null,
+
+	_screenWidth: Game._screenWidth,
+	_screenHeight: Game._screenHeight,
+
+	_messages: [],
 	
-	_hudHPoffset : [2,2], // hud HP offset - x value is to the right of map
+	_hudHPoffset : [2,2], // hud HP offset - x value is from the right of map
 	_hudBALoffset: [2,3], // hud balance offset
+	_hudMESSoffset: [0,1], // message display offset - x value is from the left of map
 
 	_generateMap: function() {
 		var mapWidth = 50;
@@ -88,28 +94,27 @@ Game.Screen.footworkScreen =  {
 		display.drawText(hudBALx,hudBALy,vsprintf("Balance: %i/%i",[disp_bal,this._player._mbal]));
 		display.drawText(hudBALx+8,hudBALy+1,vsprintf("(%i/%i)",[this._player._cbal,this._player._mbal]));
 
+		this.addMessages(this._player.getMessages());
+		this._player.clearMessages();
+		for (var i = 0; i<this._messages.length; i++) {
+			var messx = this._hudMESSoffset[0];
+			var messy = this._hudMESSoffset[1] + this._map.getHeight() + i;
+			if (messy < this.getHeight()) {
+				display.drawText(messx, messy, this._messages[i]);
+			}
+		}
+
 	},
 
 	handleInput: function(inputType, inputData) {
 		if (inputType == 'keydown') {
-			if (inputData.keyCode == ROT.VK_X) {
-				this._player.tryMove(-1,0,this._map);
-			} else if (inputData.keyCode == ROT.VK_Z) {
-				this._player.tryMove(-1,-1,this._map);
-			} else if (inputData.keyCode == ROT.VK_Q) {
-				this._player.tryMove(1,-1,this._map);
-			} else if (inputData.keyCode == ROT.VK_C) {
-				this._player.tryMove(-1,1,this._map);
-			} else if (inputData.keyCode == ROT.VK_D) {
-				this._player.tryMove(0,1,this._map);
-			} else if (inputData.keyCode == ROT.VK_E) {
-				this._player.tryMove(1,1,this._map);
-			} else if (inputData.keyCode == ROT.VK_S) {
-				this._player.tryMove(0,0,this._map);
-			} else if (inputData.keyCode == ROT.VK_A) {
-				this._player.tryMove(0,-1,this._map);
-			} else if (inputData.keyCode == ROT.VK_W) {
-				this._player.tryMove(1,0,this._map);
+			var ch = String.fromCharCode(inputData.keyCode);
+			var ctrl = Game.ControlKeys[ch];
+			console.log(ch);
+			console.log(ctrl);
+			if (ctrl) {
+				Game.flushInput();
+				this._player.tryMove(ctrl[0],ctrl[1],this._map);
 			}
 		}
 
@@ -125,5 +130,20 @@ Game.Screen.footworkScreen =  {
 		}
 
 	},
+	
+	addMessages: function(messages) {
+		this._messages = this._messages.concat(messages);
+	},
 
+	clearMessages: function() {
+		this._messages = [];
+	},
+
+	getHeight:  function() {
+		return this._screenHeight;
+	},
+
+	getWidth: function() {
+		return this._screenWidth;
+	}
 }

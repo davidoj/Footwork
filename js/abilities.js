@@ -17,11 +17,12 @@ Game.Abilities.AttackForward = {
 		var target = user.getMap().getEntityAt(target_x,target_y);
 		
 		if (target && target.hasMixin('Destructible')) {
-			console.log('hit!');
+			Game.sendMessage(user, 'You whack the %s right in its face!', [target.getName()]);
+			Game.sendMessage(target, 'The %s womps you right on your nose!', [user.getName()]);
 			target.takeDamage(user.getDamage());
 		}
 		else {
-			console.log('miss!');
+			Game.sendMessage(user, 'You fiercely swing at the air, but sadly you miss it.');
 		}
 	}
 }

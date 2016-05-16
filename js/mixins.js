@@ -3,6 +3,8 @@
 
 Game.Mixins = {};
 
+//Movement
+
 //Entity can move to unblocked squares
 //Takes argument in coordinates relative to current position
 Game.Mixins.RelMoveable = {
@@ -20,6 +22,7 @@ Game.Mixins.RelMoveable = {
 	
 			if (this._playercontrolled) {
 				this._map.getEngine().unlock();
+				this.clearMessages()
 			}
 
 			this._x = x;
@@ -56,7 +59,7 @@ Game.Mixins.AbsMoveable = {
 //Movement for directional entities is FPS based - i.e. w goes forwards, whichever way that is
 Game.Mixins.DirectionMoveable = {
 	name : 'DirectionMoveable',
-	groupName : 'Directional',
+	groupName : 'Moveable',
 	init : function(properties) {
 		var x = properties['x_dir'] || 1;
 		var y = properties['y_dir'] || -1;
@@ -105,7 +108,7 @@ Game.Mixins.DirectionMoveable = {
 			this._bal_penalty = 0;
 
 			if (this._cbal <= 0) {
-				console.log('standing up');
+				Game.sendMessage(this,'You stand on your trembling legs, readying yourself to move once more.');
 				this._cbal = 2;
 				return true;
 			} else {
@@ -120,6 +123,13 @@ Game.Mixins.DirectionMoveable = {
 		}
 	}
 }
+
+
+
+
+//Actor
+
+
 
 //Player version of the Actor mixin
 Game.Mixins.PlayerActor = {
@@ -141,6 +151,14 @@ Game.Mixins.RandomWalkerActor = {
 		this.tryMove(x,y,this._map);
 	}
 }
+
+
+
+
+
+//Combat
+
+
 
 //Use attacking abilities
 Game.Mixins.AbilityUser = {
@@ -179,7 +197,8 @@ Game.Mixins.AbilityUser = {
 		this._abilities[this._currentability].use(this);
 		
 		if (this._playercontrolled) {
-				this._map.getEngine().unlock();
+			this._map.getEngine().unlock();
+			this.clearMessages();
 		}
 			
 	}
@@ -207,27 +226,31 @@ Game.Mixins.Destructible = {
 
 
 
-//Player template
-Game.PlayerTemplate = {
-	character : '↑',
-	foreground : 'white',
-	background : 'black',
-	playercontrolled : true,
-	mhp : 2,
-	chararray: Game.Chars.SingleArrows,
-	mixins : [Game.Mixins.DirectionMoveable, 
-			  Game.Mixins.PlayerActor, 
-			  Game.Mixins.AbilityUser,
-			  Game.Mixins.Destructible]
+
+//Messaging
+
+
+Game.Mixins.MessageRecipient = {
+	name : "MessageRecipient",
+	groupName : "MessageRecipient",
+
+	init : function(properites) {
+		this._messages = [];
+	},
+	receiveMessage : function(message) {
+		this._messages.push(message);
+	},
+	getMessages : function() {
+		return(this._messages);
+	},
+	clearMessages : function() {
+		this._messages = [];
+	}
 }
 
-//Monster template
-Game.MonsterTemplate = {
-	character: '⇑',
-	foreground : 'white',
-	background : 'black',
-	chararray: Game.Chars.DoubleArrows,
-	mixins : [Game.Mixins.DirectionMoveable,
-			  Game.Mixins.RandomWalkerActor, 
-			  Game.Mixins.Destructible]
-}
+
+
+
+
+
+

@@ -1,6 +1,5 @@
 #To do list
 
-	* Add messages
 	* Click to move
 	* Balance/attacking
 	* Attack & defense interactions

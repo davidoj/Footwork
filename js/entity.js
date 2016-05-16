@@ -5,7 +5,7 @@ Game.Entity = function(properties) {
 	this._name = properties['name'] || '';
 	this._x = properties['x'] || 1;
 	this._y = properties['y'] || 1;
-	
+	this._name = properties['name'] || 'Boringtorator';
 	this._playercontrolled = properties['playercontrolled'] || false;
 
 	this._map = null;
