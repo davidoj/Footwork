@@ -179,19 +179,21 @@ Game.Mixins.Attacker = {
 		}
 	},
 	useCurrentAbility : function() {
-		var targets = this._abilities[this._currentability].getTargets(this);
+		var ability = this._abilities[this._currentability];
+		var targets = ability.getTargets(this);
 		var hit = false;
+		this._cbal = Math.max(0,this._cbal-ability.balance_cost);
 		for (i=0; i<targets.length; i++) {
 			target = this.getMap().getEntityAt(targets[i][0],targets[i][1]);
 			if (target && target.hasMixin('Destructible')) {
-				Game.sendMessage(this, this._abilities[this._currentability].dohitmessage, [target.getName()]);
-				Game.sendMessage(target, this._abilities[this._currentability].takehitmessage, [this.getName()]);
+				Game.sendMessage(this, ability.dohitmessage, [target.getName()]);
+				Game.sendMessage(target, ability.takehitmessage, [this.getName()]);
 				target.takeDamage(this.getDamage());
 				hit = true;
 			}
 		}
 		if (!hit) {
-			Game.sendMessage(this, this._abilities[this._currentability].missmessage);
+			Game.sendMessage(this, ability.missmessage);
 		}
 	}
 }
