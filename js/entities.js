@@ -10,7 +10,7 @@ Game.PlayerTemplate = {
 	chararray: Game.Chars.SingleArrows,
 	mixins : [Game.Mixins.DirectionMoveable,
 			  Game.Mixins.PlayerActor, 
-			  Game.Mixins.AbilityUser,
+			  Game.Mixins.Attacker,
 			  Game.Mixins.Destructible,
 			  Game.Mixins.MessageRecipient]
 }
@@ -25,7 +25,7 @@ Game.ConfusedWandererTemplate = {
 	mixins : [Game.Mixins.DirectionMoveable,
 			  Game.Mixins.RandomWalkerActor, 
 			  Game.Mixins.Destructible,
-			  Game.Mixins.AbilityUser]
+			  Game.Mixins.Attacker]
 }
 
 
@@ -39,5 +39,5 @@ Game.RecklessChargerTemplate = {
 	mixins: [Game.Mixins.DirectionMoveable,
 			 Game.Mixins.ChargerActor,
 			 Game.Mixins.Destructible,
-			 Game.Mixins.AbilityUser]
+			 Game.Mixins.Attacker]
 }

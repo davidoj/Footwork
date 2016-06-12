@@ -146,11 +146,11 @@ Game.Mixins.PlayerActor = {
 
 
 //Use attacking abilities
-Game.Mixins.AbilityUser = {
-	name : 'AbilityUser',
+Game.Mixins.Attacker = {
+	name : 'Attacker',
 	init : function(properties) {
 		this._dmg = properties['dmg'] || 1; //Attack damage
-		var abilities = properties['abilities'] || [Game.Abilities.AttackForward];
+		var abilities = properties['abilities'] || [Game.Attacks.AttackForward];
 
 		this._abilities = {};
 		this._currentability = properties['currentability'] || ['AttackForward'];
@@ -179,9 +179,21 @@ Game.Mixins.AbilityUser = {
 		}
 	},
 	useCurrentAbility : function() {
-		this._abilities[this._currentability].use(this);
+		var targets = this._abilities[this._currentability].getTargets(this);
+		var hit = false;
+		for (i=0; i<targets.length; i++) {
+			target = this.getMap().getEntityAt(targets[i][0],targets[i][1]);
+			if (target && target.hasMixin('Destructible')) {
+				Game.sendMessage(this, this._abilities[this._currentability].dohitmessage, [target.getName()]);
+				Game.sendMessage(target, this._abilities[this._currentability].takehitmessage, [this.getName()]);
+				target.takeDamage(this.getDamage());
+				hit = true;
+			}
+		}
+		if (!hit) {
+			Game.sendMessage(this, this._abilities[this._currentability].missmessage);
+		}
 	}
-		
 }
 
 //Take damage
