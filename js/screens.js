@@ -2,6 +2,37 @@
 
 Game.Screen = {};
 
+// Starting screen
+Game.Screen.startScreen = {
+    enter: function() {    console.log("Entered start screen."); },
+    exit: function() { console.log("Exited start screen."); },
+	messages: [],
+    render: function(display) {
+        display.drawText(1,1, "%c{yellow}Footwork Roguelike");
+		display.drawText(1,2, "Choose a control method");
+		display.drawText(1,3, "m - mouse + keyboard controls (FPS-like)");
+		display.drawText(1,4, "v - vim controls (classic roguelike-like)");
+		for (var i=0; i<this.messages.length; i++) {
+			display.drawText(1,5+i, this.messages[i]);
+		}
+    },
+    handleInput: function(inputType, inputData) {
+        if (inputType === 'keydown') {
+            if (inputData.keyCode === ROT.VK_M) {
+				Game.setDefaultControls(Game.Controls.fps);
+                Game.switchScreen(Game.Screen.footworkScreen);
+            }
+			if (inputData.keyCode === ROT.VK_V) {
+				Game.setDefaultControls(Game.Controls.vim);
+				Game.switchScreen(Game.Screen.footworkScreen);
+			}
+			else {
+				this.messages = ["please choose a valid option"];
+			}
+        }
+    }
+}
+
 Game.Screen.footworkScreen =  {
 	_map:  null,
 	_player: null,
@@ -11,9 +42,11 @@ Game.Screen.footworkScreen =  {
 
 	_messages: [],
 	
-	_hudHPoffset : [2,2], // hud HP offset - x value is from the right of map
+	_hudHPoffset: [2,2], // hud HP offset - x value is from the right of map
 	_hudBALoffset: [2,3], // hud balance offset
 	_hudMESSoffset: [0,1], // message display offset - x value is from the left of map
+
+	_controls: Game.Controls.fps,
 
 	_generateMap: function() {
 		var mapWidth = 50;
@@ -44,13 +77,13 @@ Game.Screen.footworkScreen =  {
 	},
 
 	
-	enter: function() { 
+	enter: function(reload) { 
 		console.log("entered game screen");
-		if (this._player === null) {
+		if (this._player === null || reload) {
 			this._player = new Game.Entity(Game.PlayerTemplate);
 		}
 
-		if (this._map === null) {
+		if (this._map === null || reload) {
 			this._generateMap();
 		}
 
@@ -88,7 +121,7 @@ Game.Screen.footworkScreen =  {
 		var hudBALy = this._hudBALoffset[1];
 		
 		// Show current balance with penalty
-		var disp_bal = Math.max(0,this._player._cbal-this._player._bal_penalty);
+		var disp_bal = this._player._cbal;
 
 		display.drawText(hudHPx,hudHPy,vsprintf("Health:  %i/%i",[this._player._chp,this._player._mhp]));
 		display.drawText(hudBALx,hudBALy,vsprintf("Balance: %i/%i",[disp_bal,this._player._mbal]));
@@ -108,26 +141,17 @@ Game.Screen.footworkScreen =  {
 
 	handleInput: function(inputType, inputData) {
 		if (inputType == 'keydown') {
-			var ch = String.fromCharCode(inputData.keyCode);
-			var ctrl = Game.ControlKeys[ch];
-			console.log(ch);
-			console.log(ctrl);
-			if (ctrl) {
-				Game.flushInput();
-				this._player.tryMove(ctrl[0],ctrl[1],this._map);
-			}
-		}
-
-		if (inputType == 'mousemove') {
-			var pos = Game.getDisplay().eventToPosition(inputData);
-			if (pos[0] >= 0 && pos[1] >= 0) {
-				this._player.turn(pos[0]-this._player.getX(),pos[1]-this._player.getY());
-			}			
-		}
-
-		if (inputType == 'mousedown' && inputData.shiftKey) {
-			this._player.useCurrentAbility();
-		}
+			var shift = inputData.shiftKey;
+			if (shift && inputData.keyCode == ROT.VK_R) {
+				this._map.addEntityAtRandomPosition(new Game.Entity(Game.RecklessChargerTemplate));
+			} else if (shift && inputData.keyCode == ROT.VK_C) {
+				this._map.addEntityAtRandomPosition(new Game.Entity(Game.ConfusedWandererTemplate));
+			} else if (shift && inputData.keyCode == ROT.VK_G) {
+				this.enter(true);
+			} 
+		} 
+		
+		this._controls.handleControl(inputType, inputData, this._player, this._map);
 
 	},
 	

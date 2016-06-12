@@ -8,14 +8,14 @@ Game.PlayerTemplate = {
 	playercontrolled : true,
 	mhp : 2,
 	chararray: Game.Chars.SingleArrows,
-	mixins : [Game.Mixins.DirectionMoveable, 
+	mixins : [Game.Mixins.DirectionMoveable,
 			  Game.Mixins.PlayerActor, 
 			  Game.Mixins.AbilityUser,
 			  Game.Mixins.Destructible,
 			  Game.Mixins.MessageRecipient]
 }
 
-//Monster template
+//Walk randomly, hit player if adjacent
 Game.ConfusedWandererTemplate = {
 	name: 'Confused Wanderer',
 	character: '⇑',
@@ -26,4 +26,18 @@ Game.ConfusedWandererTemplate = {
 			  Game.Mixins.RandomWalkerActor, 
 			  Game.Mixins.Destructible,
 			  Game.Mixins.AbilityUser]
+}
+
+
+//Charge towards player & try to hit it
+Game.RecklessChargerTemplate = {
+	name: 'Reckless Charger',
+	character: '⇑',
+	foreground: 'red',
+	background: 'black',
+	chararray: Game.Chars.DoubleArrows,
+	mixins: [Game.Mixins.DirectionMoveable,
+			 Game.Mixins.ChargerActor,
+			 Game.Mixins.Destructible,
+			 Game.Mixins.AbilityUser]
 }

@@ -11,8 +11,9 @@ Game.Map = function(tiles, player) {
 
 	this.addEntityAtRandomPosition(player);
 	
-	for (i=0;i<3;i++) {
+	for (i=0;i<1;i++) {
 		this.addEntityAtRandomPosition(new Game.Entity(Game.ConfusedWandererTemplate));
+		this.addEntityAtRandomPosition(new Game.Entity(Game.RecklessChargerTemplate));
 	}
 
 }
@@ -51,6 +52,25 @@ Game.Map.prototype.getEntityAt = function(x,y) {
 	return false;
 }
 
+Game.Map.prototype.getEntitiesWithinRadius = function(centerX, centerY, radius) {
+    results = [];
+    var leftX = centerX - radius;
+    var rightX = centerX + radius;
+    var topY = centerY - radius;
+    var bottomY = centerY + radius;
+    for (var i = 0; i < this._entities.length; i++) {
+        if (this._entities[i].getX() >= leftX &&
+            this._entities[i].getX() <= rightX && 
+            this._entities[i].getY() >= topY &&
+            this._entities[i].getY() <= bottomY) {
+            results.push(this._entities[i]);
+        }
+    }
+    return results;
+}
+
+
+
 Game.Map.prototype.addEntity = function (entity) {
 	
 	if (entity.getX() < 0 || entity.getX() >= this._width ||
@@ -62,7 +82,7 @@ Game.Map.prototype.addEntity = function (entity) {
 
 	entity.setMap(this);
 
-	if (entity.hasMixin('Actor')) {
+	if (entity.hasMixin('Actor') || entity.hasMixin('NPActor')) {
 		this._scheduler.add(entity, true);
 	}
 }
@@ -87,8 +107,12 @@ Game.Map.prototype.removeEntity = function (entity) {
 			this._entities.splice(i,1);
 		}
 	}
-	if (entity.hasMixin('Actor')) {
+	if (entity.hasMixin('NPActor')) {
 		this._scheduler.remove(entity);
 	}
+	if (entity.hasMixin('PlayerActor')) {
+			Game.sendMessage(entity,"Game Over");
+	}
+
 }
 			

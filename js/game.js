@@ -68,7 +68,11 @@ var Game = {
 			}
 			recipient.receiveMessage(message);
 		}
-	}
+	},
+	
+	setDefaultControls: function(controls) {
+		this.Screen.footworkScreen._controls = controls;
+	},
 		   
 
 };
@@ -80,6 +84,6 @@ window.onload = function() {
 			alert("The rot.js library isn't supported by your browser.");
 		} else {
 			Game.init();
-			Game.switchScreen(Game.Screen.footworkScreen);
+			Game.switchScreen(Game.Screen.startScreen);
 		}
 }

@@ -6,34 +6,6 @@ Game.Mixins = {};
 //Movement
 
 //Entity can move to unblocked squares
-//Takes argument in coordinates relative to current position
-Game.Mixins.RelMoveable = {
-	name : 'RelMoveable',
-	groupName : 'Moveable',
-	tryMove: function(dx,dy,map) {
-		var x = this.getX() + dx;
-		var y = this.getY() + dy;
-		var tile = map.getTile(x,y);
-		var target = this._map.getEntityAt(x,y);
-		
-		if (target && target !== this) {
-			return false;
-		} else if (tile.isWalkable()) {
-	
-			if (this._playercontrolled) {
-				this._map.getEngine().unlock();
-				this.clearMessages()
-			}
-
-			this._x = x;
-			this._y = y;
-
-			return true;
-		} else { return false;}
-	}
-}
-
-//Entity can move to unblocked squares
 //Takes argument in absolute coordinates to current position
 Game.Mixins.AbsMoveable = {
 	name : 'AbsMoveable',
@@ -55,8 +27,10 @@ Game.Mixins.AbsMoveable = {
 }
 
 
-//Entity has direction given by angle in "eighthians" (8 eighthians = 2PI radians)
-//Movement for directional entities is FPS based - i.e. w goes forwards, whichever way that is
+
+//Coordinates are relative to current position and direction
+//'Fpsmove' direction is relative to current directin
+//'RogueMove' direction is absolute
 Game.Mixins.DirectionMoveable = {
 	name : 'DirectionMoveable',
 	groupName : 'Moveable',
@@ -66,7 +40,6 @@ Game.Mixins.DirectionMoveable = {
 
 		this._mbal = properties['mbal'] || 5; //Max balance
 		this._cbal = properties['cbal'] || 5; //Current balance
-		this._bal_penalty = properties['bal_penalty'] || 0; //Balance penalty
 
 		this._direction = v2d(x,-y);
 		this._olddirection = this._direction;
@@ -76,20 +49,13 @@ Game.Mixins.DirectionMoveable = {
 	turn : function(x,y) {
 		this._direction = v2d(x,-y);
 		this._char = this._chararray[this._direction];
-		var deg = degree(this._olddirection,this._direction);
-		this._bal_penalty = Math.min(2,deg);
 	},
 
-	tryMove : function(dx,dy,map) {
-
-		if (this._playercontrolled) {
-			this._map.getEngine().unlock();
-		}
+	fpsMove : function(dx,dy,map) {
 
 		if (dx == 0 && dy == 0) {
 			this._cbal = Math.min(this._mbal,this._cbal+2);
 			this._olddirection = this._direction;
-			this._bal_penalty = 0;
 			return true;
 		}
 
@@ -103,12 +69,10 @@ Game.Mixins.DirectionMoveable = {
 
 		if (tile.isWalkable() && (!target || target == this)) {
 
-			this._cbal = this._cbal-this._bal_penalty;
 			this._olddirection = this._direction;
-			this._bal_penalty = 0;
 
 			if (this._cbal <= 0) {
-				Game.sendMessage(this,'You stand on your trembling legs, readying yourself to move once more.');
+				Game.sendMessage(this,'You stand on shaking legs, steadying yourself to step once more.');
 				this._cbal = 2;
 				return true;
 			} else {
@@ -121,15 +85,41 @@ Game.Mixins.DirectionMoveable = {
 		} else {
 			return false;
 		}
+	},
+
+
+	kbMove: function(dx,dy,noturn,map) {
+		var x = this.getX() + dx;
+		var y = this.getY() + dy;
+		var tile = map.getTile(x,y);
+		var target = this._map.getEntityAt(x,y);
+		
+		if (tile.isWalkable() && (!target || target == this)) {
+			
+			if (this._cbal <= 0) {
+				Game.sendMessage(this,'You stand on shaking legs, steadying yourself to step once more.');
+				this._cbal = 2;
+				return true;
+			} else {
+
+				this._x = x;
+				this._y = y;
+				if (!noturn) {
+					this.turn(dx,dy);
+				} else {
+					var movedir = v2d(dx,dy);
+					var absdir = mod(this._direction-movedir,8);
+					var bal_loss = Math.min(1,absdir);
+					this._cbal = Math.max(0,this._cbal-bal_loss);
+			}
+				return true;
+			}
+		} else { return false;}
 	}
 }
 
 
-
-
 //Actor
-
-
 
 //Player version of the Actor mixin
 Game.Mixins.PlayerActor = {
@@ -138,26 +128,19 @@ Game.Mixins.PlayerActor = {
 	act : function() {
 		Game.refresh();
 		this.getMap().getEngine().lock();
+	},
+	getControl : function(ch) {
+		return this.controls[ch];
+	},
+	setControls : function(controls) {
+		this.controls = controls;
 	}
 }
-
-//Takes random steps around the map
-Game.Mixins.RandomWalkerActor = {
-	name : 'MonsterActor',
-	groupName : 'Actor',
-	act : function() {
-		var x = Math.round(2*Math.random())-1;
-		var y = Math.round(2*Math.random())-1;
-		this.tryMove(x,y,this._map);
-	}
-}
-
 
 
 
 
 //Combat
-
 
 
 //Use attacking abilities
@@ -195,12 +178,6 @@ Game.Mixins.AbilityUser = {
 	},
 	useCurrentAbility : function() {
 		this._abilities[this._currentability].use(this);
-		
-		if (this._playercontrolled) {
-			this._map.getEngine().unlock();
-			this.clearMessages();
-		}
-			
 	}
 		
 }

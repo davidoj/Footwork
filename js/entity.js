@@ -75,4 +75,7 @@ Game.Entity.prototype.hasMixin = function(obj) {
 	}
 }
 
-
+//Get the manhattan distance to another entity
+Game.Entity.prototype.getDist = function(entity) {
+	return Math.abs(this.getX()-entity.getX()) + Math.abs(this.getY()-entity.getY());
+}
