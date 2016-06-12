@@ -45,10 +45,12 @@ Game.Mixins.DirectionMoveable = {
 		this._olddirection = this._direction;
 		this._chararray = properties['chararray'] || Game.Chars.SingleArrows;
 		this._char = this._chararray[this._direction];
-	},	
+	},
+	getChar : function() {
+		return this._chararray[this._direction];
+	},
 	turn : function(x,y) {
 		this._direction = v2d(x,-y);
-		this._char = this._chararray[this._direction];
 	},
 
 	fpsMove : function(dx,dy,map) {
