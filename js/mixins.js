@@ -41,7 +41,8 @@ Game.Mixins.Balanced = {
 		this._cbal = balance;
 	},
 	reduceBalance : function(reduction) {
-		this._cbal = Math.max(0,this._cbal-reduction);
+		var bal = Math.max(0,this._cbal-reduction);
+		this._cbal = Math.min(this._mbal, bal);
 		if (this._cbal == 1) {
 			Game.sendMessage(this, "Your intricate dance is getting your legs into quite a tangle");
 		}
@@ -50,7 +51,8 @@ Game.Mixins.Balanced = {
 		}
 	},
 	increaseBalance : function(increase) {
-		this._cbal = Math.min(this._mbal,this._cbal+increase);
+		var bal = Math.min(this._mbal,this._cbal+increase);
+		this._cbal = Math.max(bal,0);
 	}
 }
 
@@ -107,7 +109,7 @@ Game.Mixins.DirectionMoveable = {
 				this.setBalance(2);
 				return true;
 			} else {
-				var bal_loss = Math.min(1,movedir);
+				var bal_loss = Math.min(1,movedir-1);
 				this.reduceBalance(bal_loss);
 				this._x = x;
 				this._y = y;
@@ -140,7 +142,7 @@ Game.Mixins.DirectionMoveable = {
 				} else {
 					var movedir = v2d(dx,dy);
 					var absdir = mod(this._direction-movedir,8);
-					var bal_loss = Math.min(1,absdir);
+					var bal_loss = Math.min(1,absdir-1);
 					this.reduceBalance(bal_loss);
 			}
 				return true;
