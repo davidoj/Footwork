@@ -78,7 +78,7 @@ Game.Entity.prototype.hasMixin = function(obj) {
 	}
 }
 
-//Get the manhattan distance to another entity
+//Get the number of steps to another entity, ignoring obstacles
 Game.Entity.prototype.getDist = function(entity) {
-	return Math.abs(this.getX()-entity.getX()) + Math.abs(this.getY()-entity.getY());
+	return Math.max(this.getX()-entity.getX()), Math.abs(this.getY()-entity.getY());
 }
