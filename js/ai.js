@@ -7,7 +7,7 @@ Game.Mixins.RandomWalkerActor = {
 	name : 'MonsterActor',
 	groupName : 'NPActor',
 	act : function() {
-		console.log("I'm an actor");
+		console.log("Random walker moving");
 		var ents = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),1);
 		for (var i=0;i<ents.length;i++) {
 			if (ents[i].hasMixin('PlayerActor')) {
@@ -28,6 +28,7 @@ Game.Mixins.ChargerActor = {
 	name: 'ChargerActor',
 	groupName: 'NPActor',
 	act: function() {
+		console.log("Reckless charger moving");
 		var ents = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),6);
 		for (var i=0;i<ents.length;i++) {
 			if (ents[i].hasMixin('PlayerActor')) {

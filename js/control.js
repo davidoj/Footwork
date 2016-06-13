@@ -22,8 +22,8 @@ Game.Controls.fps = {
 			var ch = String.fromCharCode(inputData.keyCode);
 			var ctrl = this.dirMap[ch];
 			if (ctrl) {
-				Game.flushInput();
 				actor.fpsMove(ctrl[0],ctrl[1],map);
+				Game.flushInput();
 			}
 		}
 
@@ -59,9 +59,8 @@ Game.Controls.vim = {
 			var ctrl = this.dirMap[ch];
 			var shift = inputData.shiftKey;
 			if (ctrl) {
-				console.log(ctrl);
-				Game.flushInput();
 				actor.kbMove(ctrl[0],ctrl[1],shift,map);
+				Game.flushInput();
 			} else if (ch == "A" && shift) {
 				actor.useCurrentAbility();
 				Game.flushInput();
