@@ -1,10 +1,11 @@
 #To do list
 
-	* Attack & defense interactions
-	* Basic AI
+	* Control explanation screen
+	* Return to start screen
+	* Sweep, thrust attacks
+	* Shield bearers
+	* AI for new abilities
 	* Click to move
-	* Modal controls
-	* Hit previews
 	* Dungeon generator
 	* Screen scrolling
 	* Multiple weapons
