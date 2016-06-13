@@ -113,6 +113,16 @@ Game.Screen.footworkScreen =  {
 						 entity.getChar(), 
 						 entity.getForeground(),
 						 entity.getBackground());
+			for (var j = 0; j<entity._previews.length; j++) {
+				var prev = entity._previews[i];
+				var px = prev[0];
+				var py = prev[1];
+				display.draw(px, py,
+							 this._map.getTile(px,py),
+							 tile.getForeground(),
+							 entity._previewColour);
+			}
+							 
 		}
 
 		var hudHPx = this._map.getWidth() + this._hudHPoffset[0];

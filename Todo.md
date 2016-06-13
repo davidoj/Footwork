@@ -1,6 +1,5 @@
 #To do list
 
-	* Balance/attacking
 	* Attack & defense interactions
 	* Basic AI
 	* Click to move

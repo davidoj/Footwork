@@ -26,6 +26,33 @@ Game.Mixins.AbsMoveable = {
 	}
 }
 
+//Has balance statistic that governs whether various actions can be used
+Game.Mixins.Balanced = {
+	name : 'Balanced',
+	groupName : 'Balanced',
+	init : function(properties) {
+		this._mbal = properties['mbal'] || 5; //Max balance
+		this._cbal = properties['cbal'] || 5; //Current balance
+	},
+	getBalance : function() {
+		return this._cbal;
+	},
+	setBalance : function(balance) {
+		this._cbal = balance;
+	},
+	reduceBalance : function(reduction) {
+		this._cbal = Math.max(0,this._cbal-reduction);
+		if (this._cbal == 1) {
+			Game.sendMessage(this, "Your intricate dance is getting your legs into quite a tangle");
+		}
+		if (this._cbal == 0) {
+			Game.sendMessage(this, "You fall over");
+		}
+	},
+	increaseBalance : function(increase) {
+		this._cbal = Math.min(this._mbal,this._cbal+increase);
+	}
+}
 
 
 //Coordinates are relative to current position and direction
@@ -37,9 +64,6 @@ Game.Mixins.DirectionMoveable = {
 	init : function(properties) {
 		var x = properties['x_dir'] || 1;
 		var y = properties['y_dir'] || -1;
-
-		this._mbal = properties['mbal'] || 5; //Max balance
-		this._cbal = properties['cbal'] || 5; //Current balance
 
 		this._direction = v2d(x,-y);
 		this._olddirection = this._direction;
@@ -56,7 +80,7 @@ Game.Mixins.DirectionMoveable = {
 	fpsMove : function(dx,dy,map) {
 
 		if (dx == 0 && dy == 0) {
-			this._cbal = Math.min(this._mbal,this._cbal+2);
+			this.increaseBalance(2);
 			this._olddirection = this._direction;
 			return true;
 		}
@@ -73,13 +97,13 @@ Game.Mixins.DirectionMoveable = {
 
 			this._olddirection = this._direction;
 
-			if (this._cbal <= 0) {
+			if (!this.getBalance()) {
 				Game.sendMessage(this,'You stand on shaking legs, steadying yourself to step once more.');
-				this._cbal = 2;
+				this.setBalance(2);
 				return true;
 			} else {
 				var bal_loss = Math.min(1,movedir);
-				this._cbal = Math.max(0,this._cbal-bal_loss);
+				this.reduceBalance(bal_loss);
 				this._x = x;
 				this._y = y;
 			}
@@ -98,9 +122,9 @@ Game.Mixins.DirectionMoveable = {
 		
 		if (tile.isWalkable() && (!target || target == this)) {
 			
-			if (this._cbal <= 0) {
+			if (!this.getBalance()) {
 				Game.sendMessage(this,'You stand on shaking legs, steadying yourself to step once more.');
-				this._cbal = 2;
+				this.setBalance(2);
 				return true;
 			} else {
 
@@ -112,7 +136,7 @@ Game.Mixins.DirectionMoveable = {
 					var movedir = v2d(dx,dy);
 					var absdir = mod(this._direction-movedir,8);
 					var bal_loss = Math.min(1,absdir);
-					this._cbal = Math.max(0,this._cbal-bal_loss);
+					this.reduceBalance(bal_loss);
 			}
 				return true;
 			}
@@ -139,9 +163,6 @@ Game.Mixins.PlayerActor = {
 	}
 }
 
-
-
-
 //Combat
 
 
@@ -162,7 +183,11 @@ Game.Mixins.Attacker = {
 		this._dmg = damage;
 	},
 	getDamage : function() {
-		return this._dmg;
+		if (this.getBalance() + 0.5 > Math.random()) {
+			return this._dmg;
+		} else {
+			return 0;
+		}
 	},
 	addAbility : function(ability) {
 		this._abilities[ability.name] = ability;
@@ -182,19 +207,38 @@ Game.Mixins.Attacker = {
 		var ability = this._abilities[this._currentability];
 		var targets = ability.getTargets(this);
 		var hit = false;
-		this._cbal = Math.max(0,this._cbal-ability.balance_cost);
+
+		var damage = this.getDamage();
+		var bal_damage = damage;
+		if (damage) {
+			var doMessage = ability.doHitMessage;
+			var takeMessage = ability.takeHitMessage;
+			var missMessage = ability.missMessage;
+		} else {
+			var doMessage = ability.doWeakHitMessage;
+			var takeMessage = ability.takeWeakHitMessage;
+			var missMessage = ability.weakMissMessage;
+		}
+
+		this.reduceBalance(ability.balance_cost);
+		
 		for (i=0; i<targets.length; i++) {
 			target = this.getMap().getEntityAt(targets[i][0],targets[i][1]);
 			if (target && target.hasMixin('Destructible')) {
-				Game.sendMessage(this, ability.dohitmessage, [target.getName()]);
-				Game.sendMessage(target, ability.takehitmessage, [this.getName()]);
-				target.takeDamage(this.getDamage());
+				Game.sendMessage(this, doMessage, [target.getName()]);
+				Game.sendMessage(target, takeMessage, [this.getName()]);
+				target.takeDamage(damage);
+				if (target.hasMixin('Balanced') {
+					target.reduceBalance(bal_damage);
+				}
 				hit = true;
+				}
 			}
-		}
+		
 		if (!hit) {
-			Game.sendMessage(this, ability.missmessage);
+			Game.sendMessage(this, missMessage);
 		}
+		
 	}
 }
 
@@ -211,6 +255,7 @@ Game.Mixins.Destructible = {
 		if (this._chp <= 0) {
 			this.die();
 		}
+		
 	},
 	die : function() {
 		this.getMap().removeEntity(this);
