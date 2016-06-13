@@ -27,6 +27,7 @@ var Game = {
 		bindEventToScreen('keydown');
 		bindEventToScreen('mousemove');
 		bindEventToScreen('mousedown');
+		bindEventToScreen('keyup');
 		//bindEventToScreen('keyup');
 		//bindEventToScreen('keypress');
 

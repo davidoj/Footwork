@@ -15,9 +15,7 @@ Game.Controls.fps = {
 	},
 	handleControl : function(inputType, inputData, actor, map) {
 		var shift = inputData.shiftKey;
-		if (shift) {
-			actor._direction = actor._olddirection;
-		}
+
 		if (inputType == 'keydown') {
 			var ch = String.fromCharCode(inputData.keyCode);
 			var ctrl = this.dirMap[ch];
@@ -40,6 +38,12 @@ Game.Controls.fps = {
 			actor.useCurrentAbility();
 			Game.flushInput();
 		}
+		actor.clearPreviews();
+		if (shift) {
+			actor._direction = actor._olddirection;
+			actor.previewCurrentAbility();
+		}
+
 	}
 }
 

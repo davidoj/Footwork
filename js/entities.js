@@ -13,7 +13,8 @@ Game.PlayerTemplate = {
 			  Game.Mixins.PlayerActor, 
 			  Game.Mixins.Attacker,
 			  Game.Mixins.Destructible,
-			  Game.Mixins.MessageRecipient]
+			  Game.Mixins.MessageRecipient,
+			  Game.Mixins.PreviewSpawner]
 }
 
 //Walk randomly, hit player if adjacent
@@ -43,4 +44,13 @@ Game.RecklessChargerTemplate = {
 			 Game.Mixins.ChargerActor,
 			 Game.Mixins.Destructible,
 			 Game.Mixins.Attacker]
+}
+
+//Preview entity
+Game.PreviewTemplate = {
+	name: "Preview",
+	character: ".",
+	foreground: 'white',
+	background: 'red',
+	mixins: []
 }

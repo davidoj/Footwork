@@ -5,7 +5,7 @@ Game.Attacks = {};
 // Basic forward attack
 Game.Attacks.AttackForward = {
 
-	name : 'AttackForward',
+	name : 'Basic Attack',
 	balance_cost : 2,
 	getTargets : function(user) {
 		targets = [];

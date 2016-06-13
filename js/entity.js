@@ -10,9 +10,6 @@ Game.Entity = function(properties) {
 
 	this._map = null;
 
-	this._previews = [];
-	this._previewColour = properties['previewColour'] || 'red';
-
 	this._attachedMixins = {};
 	this._attachedMixinGroups = {};
 	var mixins =  properties['mixins'];

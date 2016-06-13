@@ -44,7 +44,9 @@ Game.Screen.footworkScreen =  {
 	
 	_hudHPoffset: [2,2], // hud HP offset - x value is from the right of map
 	_hudBALoffset: [2,3], // hud balance offset
+	_hudABLoffset: [2,4], // hud ability offset
 	_hudMESSoffset: [0,1], // message display offset - x value is from the left of map
+
 
 	_controls: Game.Controls.fps,
 
@@ -96,6 +98,9 @@ Game.Screen.footworkScreen =  {
 
 
 	render: function(display) {
+		var entities = this._map.getEntities();
+
+		//Draw map
 		for (var x = 0; x<this._map.getWidth(); x++) {
 			for (var y = 0; y<this._map.getHeight(); y++) {
 				var tile = this._map.getTile(x,y);
@@ -105,36 +110,28 @@ Game.Screen.footworkScreen =  {
 							 tile.getBackground());
 			}
 		}
-		var entities = this._map.getEntities();
 
+		//Draw entities
 		for (var i = 0; i<entities.length; i++) {
 			var entity = entities[i];
 			display.draw(entity.getX(), entity.getY(),
 						 entity.getChar(), 
 						 entity.getForeground(),
 						 entity.getBackground());
-			for (var j = 0; j<entity._previews.length; j++) {
-				var prev = entity._previews[i];
-				var px = prev[0];
-				var py = prev[1];
-				display.draw(px, py,
-							 this._map.getTile(px,py),
-							 tile.getForeground(),
-							 entity._previewColour);
-			}
-							 
 		}
 
 		var hudHPx = this._map.getWidth() + this._hudHPoffset[0];
 		var hudHPy = this._hudHPoffset[1];
 		var hudBALx = this._map.getWidth() + this._hudBALoffset[0];
 		var hudBALy = this._hudBALoffset[1];
+		var hudABLx = this._map.getWidth() + this._hudABLoffset[0];
+		var hudABLy = this._hudABLoffset[1];
 		
-		// Show current balance with penalty
 		var disp_bal = this._player._cbal;
 
-		display.drawText(hudHPx,hudHPy,vsprintf("Health:  %i/%i",[this._player._chp,this._player._mhp]));
-		display.drawText(hudBALx,hudBALy,vsprintf("Balance: %i/%i",[disp_bal,this._player._mbal]));
+		display.drawText(hudHPx,hudHPy, vsprintf("Health:  %i/%i",[this._player._chp,this._player._mhp]));
+		display.drawText(hudBALx, hudBALy, vsprintf("Balance: %i/%i",[disp_bal,this._player._mbal]));
+		display.drawText(hudABLx, hudABLy, vsprintf("Attack: %s",[this._player._currentability]));
 
 		this.addMessages(this._player.getMessages());
 		this._player.clearMessages();
