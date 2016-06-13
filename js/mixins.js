@@ -74,7 +74,12 @@ Game.Mixins.DirectionMoveable = {
 		return this._chararray[this._direction];
 	},
 	turn : function(x,y) {
-		this._direction = v2d(x,-y);
+		if (this.getBalance()) {
+			this._direction = v2d(x,-y);
+			return 1;
+		} else {
+			return 0;
+		}
 	},
 
 	fpsMove : function(dx,dy,map) {
@@ -240,6 +245,11 @@ Game.Mixins.Attacker = {
 			Game.sendMessage(this, missMessage);
 		}
 		
+	},
+	readyNextAbility : function() {
+		var abilities = Object.keys(this._abilities);
+		var idx = abilities.indexOf(this._currentability);
+		this._currentability = abilities[mod(idx+1,abilities.length)];
 	}
 }
 

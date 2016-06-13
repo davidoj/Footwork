@@ -135,7 +135,6 @@ Game.Screen.footworkScreen =  {
 
 		display.drawText(hudHPx,hudHPy,vsprintf("Health:  %i/%i",[this._player._chp,this._player._mhp]));
 		display.drawText(hudBALx,hudBALy,vsprintf("Balance: %i/%i",[disp_bal,this._player._mbal]));
-		display.drawText(hudBALx+8,hudBALy+1,vsprintf("(%i/%i)",[this._player._cbal,this._player._mbal]));
 
 		this.addMessages(this._player.getMessages());
 		this._player.clearMessages();

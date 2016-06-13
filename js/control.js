@@ -24,6 +24,8 @@ Game.Controls.fps = {
 			if (ctrl) {
 				actor.fpsMove(ctrl[0],ctrl[1],map);
 				Game.flushInput();
+			} else if (ch == 'N') {
+				actor.readyNextAbility();
 			}
 		}
 
