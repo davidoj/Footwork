@@ -111,7 +111,7 @@ Game.Map.prototype.removeEntity = function (entity) {
 		this._scheduler.remove(entity);
 	}
 	if (entity.hasMixin('PlayerActor')) {
-			Game.sendMessage(entity,"Game Over");
+			Game.sendMessage(entity,"Game Over. Press 'G' to restart.");
 	}
 
 }

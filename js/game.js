@@ -33,7 +33,7 @@ var Game = {
 
 	},
 
-	switchScreen: function(screen) {
+	switchScreen: function(screen,reload) {
 		if (this._currentScreen !== null) {
 			this._currentScreen.exit();
 		}
@@ -41,7 +41,7 @@ var Game = {
 		this._currentScreen = screen;
 
 		if (this._currentScreen !== null) {
-			this._currentScreen.enter();
+			this._currentScreen.enter(reload);
 			this.refresh();
 		}
 	},

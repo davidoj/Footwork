@@ -53,7 +53,7 @@ Game.Screen.startScreen = {
 								  '%c{yellow} Press Enter to start']
 			}
 			if (this._ready && inputData.keyCode === ROT.VK_RETURN) {
-				Game.switchScreen(Game.Screen.footworkScreen);
+				Game.switchScreen(Game.Screen.footworkScreen,1);
 			}
         }
     }

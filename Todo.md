@@ -1,6 +1,5 @@
 #To do list
 
-	* Add needed vi-keys
 	* Reset on return to start screen
 	* thrust attack
 	* Shield bearers
