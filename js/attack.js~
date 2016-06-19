@@ -55,14 +55,17 @@ Game.Mixins.Attacker = {
 			var missMessage = ability.weakMissMessage;
 		}
 
-		this.raiseEvent('onAction',ability.balance_cost);
+		this.reduceBalance(ability.balance_cost);
 		
 		for (i=0; i<targets.length; i++) {
 			target = this.getMap().getEntityAt(targets[i][0],targets[i][1]);
 			if (target && target.hasMixin('Destructible')) {
 				Game.sendMessage(this, doMessage, [target.getName()]);
 				Game.sendMessage(target, takeMessage, [this.getName()]);
-				target.takeDamage(damage,bal_damage);
+				target.takeDamage(damage);
+				if (target.hasMixin('Balanced')) {
+					target.reduceBalance(bal_damage);
+				}
 				hit = true;
 				}
 			}
@@ -79,7 +82,7 @@ Game.Mixins.Attacker = {
 		var idx = abilities.indexOf(this._currentability);
 		this._currentability = abilities[mod(idx+1,abilities.length)];
 	},
-};
+}
 
 //Take damage
 Game.Mixins.Destructible = {
@@ -89,18 +92,17 @@ Game.Mixins.Destructible = {
 		this._mhp = properties['mhp'] || 1; //Max hitpoints
 		this._chp = properties['chp'] || this._mhp; //Current hitpoints
 	},
-	takeDamage : function(damage, bal_damage) {
+	takeDamage : function(damage) {
 		this._chp -= damage;
 		if (this._chp <= 0) {
 			this.die();
 		}
-		this.raiseEvent('onTakeDamage',damage,bal_damage);
 		
 	},
 	die : function() {
 		this.getMap().removeEntity(this);
 	}
-};
+}
 
 
 

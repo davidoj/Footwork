@@ -19,7 +19,7 @@ Game.Mixins.AbsMoveable = {
 		}
 		else { return false;}
 	}
-}
+};
 
 //Balance statistic that governs whether various actions can be used
 Game.Mixins.Balanced = {
@@ -54,9 +54,12 @@ Game.Mixins.Balanced = {
 		onGetUp : function() {
 			Game.sendMessage(this,'You stand on shaking legs, steadying yourself to step once more.');
 			this.setBalance(2);
+		},
+		onTakeDamage : function(damage, bal_damage) {
+			this.changeBalance(bal_damage);
 		}
 	}
-}
+};
 
 //Coordinates are relative to current position and direction
 //'Fpsmove' direction is relative to current directin
@@ -171,7 +174,6 @@ Game.Mixins.DirectionMoveable = {
 
 	listeners : {
 		onTrip : function() {
-			console.log('tripped');
 			this._standing = false;
 		},
 		onGetUp : function() {
@@ -179,4 +181,4 @@ Game.Mixins.DirectionMoveable = {
 		},
 
 	}
-}
+};
