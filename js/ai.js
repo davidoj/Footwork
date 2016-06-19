@@ -11,7 +11,8 @@ Game.Mixins.RandomWalkerActor = {
 		var ents = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),1);
 		for (var i=0;i<ents.length;i++) {
 			if (ents[i].hasMixin('PlayerActor')) {
-				if (this.turn(ents[i].getX()-this.getX(),ents[i].getY()-this.getY())) {
+				var final_dir = v2d(ents[i].getX()-this.getX(),-(ents[i].getY()-this.getY()));
+				if (this.turn(final_dir,0)) {
 					this.useCurrentAbility();
 				} else {
 					this.fpsMove(0,0,this._map);
@@ -35,7 +36,8 @@ Game.Mixins.ChargerActor = {
 		var ents = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),6);
 		for (var i=0;i<ents.length;i++) {
 			if (ents[i].hasMixin('PlayerActor')) {
-				if (this.turn(ents[i].getX()-this.getX(),ents[i].getY()-this.getY())) {
+				var final_dir = v2d(ents[i].getX()-this.getX(),-(ents[i].getY()-this.getY()));
+				if (this.turn(final_dir,0)) {
 					if (this.getDist(ents[i]) > 1) {
 						this.fpsMove(1,0,this._map);
 					} else {

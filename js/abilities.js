@@ -29,7 +29,7 @@ Game.Attacks.SweepAttack = {
 	getTargets : function(user) {
 		targets = [];
 		var dir1_v = d2v(user._direction);
-		var dir2_v = d2v(user._direction-1);
+		var dir2_v = d2v(mod(user._direction-1,8));
 		var target1_x = user.getX()+dir1_v[0];
 		var target1_y = user.getY()+dir1_v[1];
 		var target2_x = user.getX()+dir2_v[0];

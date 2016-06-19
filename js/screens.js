@@ -6,28 +6,54 @@ Game.Screen = {};
 Game.Screen.startScreen = {
     enter: function() {    console.log("Entered start screen."); },
     exit: function() { console.log("Exited start screen."); },
-	messages: [],
+	_messages: [],
+	_ready: false,
     render: function(display) {
         display.drawText(1,1, "%c{yellow}Footwork Roguelike");
-		display.drawText(1,2, "Choose a control method");
-		display.drawText(1,3, "m - mouse + keyboard controls (FPS-like)");
-		display.drawText(1,4, "v - vim controls (classic roguelike-like)");
-		for (var i=0; i<this.messages.length; i++) {
-			display.drawText(1,5+i, this.messages[i]);
+		display.drawText(1,3, "Choose a control method");
+		display.drawText(1,4, "m - mouse + keyboard controls (FPS-like)");
+		display.drawText(1,5, "v - vim controls (classic roguelike-like)");
+		for (var i=0; i<this._messages.length; i++) {
+			display.drawText(1,7+i, this._messages[i]);
 		}
     },
     handleInput: function(inputType, inputData) {
         if (inputType === 'keydown') {
             if (inputData.keyCode === ROT.VK_M) {
+				this._ready = true; 
 				Game.setDefaultControls(Game.Controls.fps);
-                Game.switchScreen(Game.Screen.footworkScreen);
+				this._messages = ['%c{cyan}mouse - point your character',
+								  '%c{cyan}w - forward',
+								  '%c{cyan}a - left',
+								  '%c{cyan}s - backwards',
+								  '%c{cyan}d - right',
+								  '%c{cyan}qezc - diagonals',
+								  '%c{cyan}shift - preview attack',
+								  '%c{cyan}shift+click - attack',
+								  '%c{cyan}x - stay in place, change direction or stand up',
+								  '%c{cyan}n - next attack',
+								  '%c{cyan}G - back to this screen',
+								  '',
+								  '%c{yellow} Press Enter to start']
             }
 			if (inputData.keyCode === ROT.VK_V) {
+				this._ready = true;
 				Game.setDefaultControls(Game.Controls.vim);
-				Game.switchScreen(Game.Screen.footworkScreen);
+				this._messages = ['%c{cyan}k - up',
+								  '%c{cyan}h - left',
+								  '%c{cyan}j - down',
+								  '%c{cyan}l - right',
+								  '%c{cyan}yubn - diagonals',
+								  '%c{cyan}shift - preview attack',
+								  '%c{cyan}shift+A - attack',
+								  '%c{cyan}x - stay in place, change direction or stand up',
+								  '%c{cyan}n - next attack',
+								  '%c{cyan}G - back to this screen',
+								  '',
+								  '%c{yellow} Press Enter to start']
 			}
-			else {
-				this.messages = ["please choose a valid option"];
+			if (this._ready && inputData.keyCode === ROT.VK_RETURN) {
+				Game.switchScreen(Game.Screen.footworkScreen);
 			}
         }
     }
@@ -153,7 +179,7 @@ Game.Screen.footworkScreen =  {
 			} else if (shift && inputData.keyCode == ROT.VK_C) {
 				this._map.addEntityAtRandomPosition(new Game.Entity(Game.ConfusedWandererTemplate));
 			} else if (shift && inputData.keyCode == ROT.VK_G) {
-				this.enter(true);
+				Game.switchScreen(Game.Screen.startScreen);
 			} 
 		} 
 		

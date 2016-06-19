@@ -66,7 +66,8 @@ Game.Mixins.DirectionMoveable = {
 	init : function(properties) {
 		var x = properties['x_dir'] || 1;
 		var y = properties['y_dir'] || -1;
-
+		
+		this._turnMode = 0;
 		this._direction = v2d(x,-y);
 		this._olddirection = this._direction;
 		this._chararray = properties['chararray'] || Game.Chars.SingleArrows;
@@ -75,41 +76,32 @@ Game.Mixins.DirectionMoveable = {
 	getChar : function() {
 		return this._chararray[this._direction];
 	},
-	turn : function(x,y) {
+	turn : function(direction,temp) {
 		if (this.getBalance()) {
-			this._direction = v2d(x,-y);
-			return 1;
+			this._direction = direction;
+			if (!temp) {
+				this._olddirection = this._direction;
+			}
+			return true;
 		} else {
-			return 0;
+			return false;
 		}
 	},
 
-	fpsMove : function(dx,dy,map) {
-
-		if (dx == 0 && dy == 0) {
-			this.increaseBalance(2);
-			this._olddirection = this._direction;
-			return true;
-		}
-
-		var movedir = v2d(dx,dy);
-		var absdir = mod(this._direction-movedir,8);
-		var movevec = d2v(absdir);
-		var x = movevec[0]+this.getX();
-		var y = movevec[1]+this.getY();
+	// Move to position x, y, dir
+	tryMoveTo : function(x, y, rel_dir, final_dir, map) {
 		var tile = map.getTile(x,y);
 		var target = this._map.getEntityAt(x,y);
 
 		if (tile.isWalkable() && (!target || target == this)) {
-
-			this._olddirection = this._direction;
+			this.turn(final_dir,0);
 
 			if (!this.getBalance()) {
 				Game.sendMessage(this,'You stand on shaking legs, steadying yourself to step once more.');
 				this.setBalance(2);
 				return true;
 			} else {
-				var bal_loss = Math.min(1,movedir-1);
+				var bal_loss = Math.min(1,mod(rel_dir,7)-1);
 				this.reduceBalance(bal_loss);
 				this._x = x;
 				this._y = y;
@@ -118,36 +110,60 @@ Game.Mixins.DirectionMoveable = {
 		} else {
 			return false;
 		}
+		
+	},
+	
+	tryWait : function(final_dir, map) {
+		this.increaseBalance(2);
+		this._direction = final_dir;
+		this._olddirection = final_dir;
+		return true;
+	},
+
+	fpsMove : function(dx,dy,map) {
+
+		if (dx == 0 && dy == 0) {
+			return this.tryWait(this._direction, this.getMap());
+		}
+
+
+		var rel_dir = v2d(dx,dy);
+		var move_dir = mod(this._direction-rel_dir,8);
+		var move_vec = d2v(move_dir);
+		var x = move_vec[0]+this.getX();
+		var y = move_vec[1]+this.getY();
+
+		return this.tryMoveTo(x, y, rel_dir, this._direction, this.getMap());
+
 	},
 
 
 	kbMove: function(dx,dy,noturn,map) {
+
+
+		if (this._turnMode) {
+			this._turnMode = 0;
+			final_dir = v2d(dx,-dy);
+			return this.tryWait(final_dir, this.getMap());
+		}
+
+		if (dx == 0 && dy == 0) {
+			return this.tryWait(this._direction, this.getMap());
+		}
+
 		var x = this.getX() + dx;
 		var y = this.getY() + dy;
-		var tile = map.getTile(x,y);
-		var target = this._map.getEntityAt(x,y);
 		
-		if (tile.isWalkable() && (!target || target == this)) {
-			
-			if (!this.getBalance()) {
-				Game.sendMessage(this,'You stand on shaking legs, steadying yourself to step once more.');
-				this.setBalance(2);
-				return true;
-			} else {
+		if (!noturn) {
+			var final_dir = v2d(dx,-dy);
+			var rel_dir = 0;
+		} else {
+			var final_dir = this._direction;
+			var rel_dir = mod(this._direction - v2d(dx,-dy),8);
+		}
 
-				this._x = x;
-				this._y = y;
-				if (!noturn) {
-					this.turn(dx,dy);
-				} else {
-					var movedir = v2d(dx,dy);
-					var absdir = mod(this._direction-movedir,8);
-					var bal_loss = Math.min(1,absdir-1);
-					this.reduceBalance(bal_loss);
-			}
-				return true;
-			}
-		} else { return false;}
+		return this.tryMoveTo(x, y, rel_dir, final_dir, this.getMap());
+
 	}
 }
 

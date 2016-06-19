@@ -1,8 +1,8 @@
 #To do list
 
-	* Control explanation screen
-	* Return to start screen
-	* Sweep, thrust attacks
+	* Add needed vi-keys
+	* Reset on return to start screen
+	* thrust attack
 	* Shield bearers
 	* AI for new abilities
 	* Click to move
@@ -17,13 +17,6 @@
 Not convinced the current system is good; a bit unintuitive, odd random falls due to movement. Not sure how to make it better, though.
 
 Ideas:
-
-### No balance loss for turning
-
-	* Makes direction somewhat non-meaningful as-is.
-		** May be remedied by direction-specific abilities
-		** Is mouse needed for direction? Need keys for step, spin and strafe. Reduced modifiers available
-			due to browser use
 
 
 ### Click to move

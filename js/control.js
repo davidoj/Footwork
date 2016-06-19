@@ -3,13 +3,13 @@ Game.Controls = {};
 
 Game.Controls.fps = {
 	dirMap : {
-		"X" : [-1,0],
+		"S" : [-1,0],
 		"Z" : [-1,-1],
 		"Q" : [1,-1],
 		"C" : [-1,1],
 		"D" : [0,1],
 		"E" : [1,1],
-		"S" : [0,0],
+		"X" : [0,0],
 		"A" : [0,-1],
 		"W" : [1,0]
 	},
@@ -30,7 +30,8 @@ Game.Controls.fps = {
 		if (inputType == 'mousemove') {
 			var pos = Game.getDisplay().eventToPosition(inputData);
 			if (pos[0] >= 0 && pos[1] >= 0 && !shift) {
-				actor.turn(pos[0]-actor.getX(),pos[1]-actor.getY());
+				var final_dir = v2d(pos[0]-actor.getX(),-(pos[1]-actor.getY()))
+				actor.turn(final_dir,1);
 			}			
 		}
 
@@ -60,17 +61,30 @@ Game.Controls.vim = {
 		"K" : [0,-1]
 	},
 	handleControl : function(inputType, inputData, actor, map) {
+		var shift = inputData.shiftKey;
+
 		if (inputType == 'keydown') {
 			var ch = String.fromCharCode(inputData.keyCode);
 			var ctrl = this.dirMap[ch];
 			var shift = inputData.shiftKey;
 			if (ctrl) {
-				actor.kbMove(ctrl[0],ctrl[1],shift,map);
-				Game.flushInput();
+				if (ch == 'Z') {
+					Game.sendMessage(actor,"Which direction do you want to face?");
+					actor._turnMode = 1;
+				}
+				else {
+					actor.kbMove(ctrl[0],ctrl[1],shift,map);
+					Game.flushInput();
+				}
 			} else if (ch == "A" && shift) {
 				actor.useCurrentAbility();
 				Game.flushInput();
 			}
 		}
+		actor.clearPreviews();
+		if (shift) {
+			actor.previewCurrentAbility();
+		}
+
 	}
 }
