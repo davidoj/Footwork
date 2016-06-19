@@ -7,7 +7,7 @@ Game.PlayerTemplate = {
 	background : 'black',
 	playercontrolled : true,
 	mhp : 2,
-	abilities: [Game.Attacks.AttackForward,Game.Attacks.SweepAttack],
+	abilities: [Game.Attacks.ChargeAttack, Game.Attacks.SweepAttack],
 	chararray: Game.Chars.SingleArrows,
 	mixins : [Game.Mixins.Balanced,
 			  Game.Mixins.DirectionMoveable,

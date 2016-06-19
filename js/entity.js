@@ -1,8 +1,7 @@
 
 Game.Entity = function(properties) {
 	properties = properties || {};
-	Game.Glyph.call(this,properties);
-	this._name = properties['name'] || '';
+	Game.DynamicGlyph.call(this,properties);
 	this._x = properties['x'] || 1;
 	this._y = properties['y'] || 1;
 	this._name = properties['name'] || 'Boringtorator';
@@ -10,33 +9,10 @@ Game.Entity = function(properties) {
 
 	this._map = null;
 
-	this._attachedMixins = {};
-	this._attachedMixinGroups = {};
-	var mixins =  properties['mixins'];
-	for (var i = 0; i < mixins.length; i++) {
-		for (var key in mixins[i]) {
-			if (key !== 'init' && key !== 'name' && !this.hasOwnProperty(key)) {
-				this[key] = mixins[i][key];
-			}
-		}
-		this._attachedMixins[mixins[i].name] = true;
+};
 
-        if (mixins[i].groupName) {
-            this._attachedMixinGroups[mixins[i].groupName] = true;
-        }
+Game.Entity.extend(Game.DynamicGlyph);
 
-        if (mixins[i].init) {
-            mixins[i].init.call(this, properties);
-        }
-	}
-
-}
-
-Game.Entity.extend(Game.Glyph);
-
-Game.Entity.prototype.setName = function(name) {
-	this._name = name;
-}
 
 Game.Entity.prototype.setX = function(x) {
 	this._x = x;
@@ -44,10 +20,6 @@ Game.Entity.prototype.setX = function(x) {
 
 Game.Entity.prototype.setY = function(y) {
 	this._y = y;
-}
-
-Game.Entity.prototype.getName = function() {
-	return this._name;
 }
 
 Game.Entity.prototype.getX = function() {
@@ -64,15 +36,6 @@ Game.Entity.prototype.setMap = function(map) {
 
 Game.Entity.prototype.getMap = function() {
 	return this._map;
-}
-
-Game.Entity.prototype.hasMixin = function(obj) {
-	if (typeof obj === 'object') {
-		return this._attachedMixins[obj.name];
-	}
-	else {
-		return this._attachedMixins[obj] || this._attachedMixinGroups[obj];
-	}
 }
 
 //Get the number of steps to another entity, ignoring obstacles

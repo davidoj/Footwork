@@ -1,7 +1,12 @@
 #To do list
 
-	* Reset on return to start screen
-	* thrust attack
+	* Events and listeners, remove mixin dependencies
+	* Animations
+	  ** Health down
+	  ** Hit
+	  ** Balance down
+	  ** Enemy move
+	  ** Target update
 	* Shield bearers
 	* AI for new abilities
 	* Click to move
@@ -12,8 +17,6 @@
 	* Why does the font change on first load?
 	
 ## Control, Attack, Defense
-
-Not convinced the current system is good; a bit unintuitive, odd random falls due to movement. Not sure how to make it better, though.
 
 Ideas:
 

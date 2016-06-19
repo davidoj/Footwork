@@ -6,6 +6,7 @@ Game.Map = function(tiles, player) {
 	this._height = tiles[0].length;
 	
 	this._entities = [];
+	this._animations = [];
 	this._scheduler = new ROT.Scheduler.Simple();
 	this._engine = new ROT.Engine(this._scheduler);
 
@@ -73,11 +74,13 @@ Game.Map.prototype.getEntitiesWithinRadius = function(centerX, centerY, radius) 
 
 Game.Map.prototype.addEntity = function (entity) {
 	
-	if (entity.getX() < 0 || entity.getX() >= this._width ||
-		entity.getY() < 0 || entity.getY() >= this._height) {
-		throw new Error("Attempting to add entity out of bounds");
+	if ('_x' in entity) {
+		if (entity.getX() < 0 || entity.getX() >= this._width ||
+			entity.getY() < 0 || entity.getY() >= this._height) {
+			throw new Error("Attempting to add entity out of bounds");
+		}
 	}
-	
+
 	this._entities.push(entity);
 
 	entity.setMap(this);
