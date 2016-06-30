@@ -1,7 +1,5 @@
 #To do list
 
-
-	* Shield bearers
 	* AI for new abilities
 	* Click to move
 	* Dungeon generator
