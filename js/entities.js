@@ -49,7 +49,16 @@ Game.RecklessChargerTemplate = {
 
 Game.ShieldBearerTemplate = {
 	name: 'Shield Bearer',
-	character: String.fromCharCode(0x2912)
+	character: String.fromCharCode(0x2912),
+	foreground: 'white',
+	background: 'black',
+	chararray: Game.Chars.ShieldArrows,
+	mixins: [Game.Mixins.Balanced,
+			 Game.Mixins.DirectionMoveable,
+			 Game.Mixins.ChargerActor,
+			 Game.Mixins.Destructible,
+			 Game.Mixins.Attacker,
+			 Game.Mixins.Shielded]
 }
 
 //Preview entity

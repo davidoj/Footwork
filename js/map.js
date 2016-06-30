@@ -15,6 +15,7 @@ Game.Map = function(tiles, player) {
 	for (i=0;i<1;i++) {
 		this.addEntityAtRandomPosition(new Game.Entity(Game.ConfusedWandererTemplate));
 		this.addEntityAtRandomPosition(new Game.Entity(Game.RecklessChargerTemplate));
+		this.addEntityAtRandomPosition(new Game.Entity(Game.ShieldBearerTemplate));
 	}
 
 }

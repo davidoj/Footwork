@@ -60,12 +60,26 @@ Game.Mixins.Attacker = {
 		for (i=0; i<targets.length; i++) {
 			target = this.getMap().getEntityAt(targets[i][0],targets[i][1]);
 			if (target && target.hasMixin('Destructible')) {
+
+				if (target.hasMixin('Shielded')) {
+					var prot = target.getProtectedTiles();
+					for (var j=0; j<prot.length; j++) {
+						console.log('prot: ' + prot[j][0] + ', ' + prot[j][1]);
+						console.log('this: ' + this.getX() + ', ' + this.getY());
+						if (target.getMap().getEntityAt(prot[j][0],prot[j][1])==this) {
+							doMessage = "Your hopeful strike glances of the %s's shield";
+							takeMessage = "The %s fiercely strikes your shield with furious determination";
+							damage = 0;
+						}
+					}
+				}
+
 				Game.sendMessage(this, doMessage, [target.getName()]);
 				Game.sendMessage(target, takeMessage, [this.getName()]);
 				target.takeDamage(damage,bal_damage);
 				hit = true;
-				}
 			}
+		}
 		
 		if (!hit) {
 			Game.sendMessage(this, missMessage);
@@ -103,5 +117,14 @@ Game.Mixins.Destructible = {
 };
 
 
+//Protected by a shield in some directions
+Game.Mixins.Shielded = {
+	name : 'Shielded',
+	groupName : 'Shielded',
 
-
+	getProtectedTiles : function() {
+		var vec = d2v(this._direction);
+		var prot = [this.getX()+vec[0],this.getY()+vec[1]];
+		return [prot];
+	}
+}

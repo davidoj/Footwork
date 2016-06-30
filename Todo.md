@@ -20,7 +20,8 @@
 	* Wonky character spacing in Firefox
 	* Wonky character spacing in general
 	* Why does the font change on first load?
-
+	* Reckless charger AI sometimes doesn't go anywhere
+	* Message order is not always sensible
 	
 ## Control, Attack, Defense
 
