@@ -1,9 +1,0 @@
-// Attacking abilities
-
-
-
-Game.Abilities = {};
-
-// Basic forward attack
-Game.Abilities.AttackForward = {
-	
