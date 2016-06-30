@@ -28,10 +28,3 @@ Game.Glyph.prototype.setForeground = function(colour){
 	this._foreground = colour;
 }
 
-
-Game.Chars = {};
-
-Game.Chars.SingleArrows = ['→','↗','↑','↖','←','↙','↓','↘']
-Game.Chars.DoubleArrows = ['⇒','⇗','⇑','⇖','⇐','⇙','⇓','⇘']
-Game.Chars.OutlineArrows = ['⇨','⬀','⇧','⬁','⇦','⬃','','']
-Game.Chars.SolidArrows = ['➡','⬈','⬆','⬉','⬅','⬋','⬇','⬊']

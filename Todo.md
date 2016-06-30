@@ -1,12 +1,6 @@
 #To do list
 
-	* Events and listeners, remove mixin dependencies
-	* Animations
-	  ** Health down
-	  ** Hit
-	  ** Balance down
-	  ** Enemy move
-	  ** Target update
+
 	* Shield bearers
 	* AI for new abilities
 	* Click to move
@@ -14,7 +8,19 @@
 	* Screen scrolling
 	* Multiple weapons
 	* Advanced AI
+	* Animations
+	  ** Health down
+	  ** Hit
+	  ** Balance down
+	  ** Enemy move
+	  ** Target update
+
+#Bugs
+
+	* Wonky character spacing in Firefox
+	* Wonky character spacing in general
 	* Why does the font change on first load?
+
 	
 ## Control, Attack, Defense
 

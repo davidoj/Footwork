@@ -2,24 +2,24 @@
 
 //Entity can move to unblocked squares
 //Takes argument in absolute coordinates to current position
-Game.Mixins.AbsMoveable = {
-	name : 'AbsMoveable',
-	groupName : 'Moveable',
-	tryMove: function(x,y,map) {
-		var tile = map.getTile(x,y);
-		if (tile.isWalkable() && !this._map.getEntityAt(x,y)) {
-			this._x = x;
-			this._y = y;
+// Game.Mixins.AbsMoveable = {
+// 	name : 'AbsMoveable',
+// 	groupName : 'Moveable',
+// 	tryMove: function(x,y,map) {
+// 		var tile = map.getTile(x,y);
+// 		if (tile.isWalkable() && !this._map.getEntityAt(x,y)) {
+// 			this._x = x;
+// 			this._y = y;
 
-			if (this._playercontrolled) {
-				this._map.getEngine().unlock();
-			}
+// 			if (this._playercontrolled) {
+// 				this.getMap().getEngine().unlock();
+// 			}
 
-			return true;
-		}
-		else { return false;}
-	}
-};
+// 			return true;
+// 		}
+// 		else { return false;}
+// 	}
+// };
 
 //Balance statistic that governs whether various actions can be used
 Game.Mixins.Balanced = {
@@ -100,6 +100,10 @@ Game.Mixins.DirectionMoveable = {
 		var target = this._map.getEntityAt(x,y);
 
 		if (tile.isWalkable() && (!target || target == this)) {
+			// this.getMap().getEngine().lock();
+			// var unlock;
+			// unlock = this.getMap().getEngine().unlock;
+			// setTimeout(unlock, 3000);
 			this.turn(final_dir,0);
 
 			if (!this._standing) {

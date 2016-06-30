@@ -1,0 +1,9 @@
+// Special character sets
+
+Game.Chars = {};
+
+Game.Chars.SingleArrows = ['→','↗','↑','↖','←','↙','↓','↘']
+Game.Chars.DoubleArrows = ['⇒','⇗','⇑','⇖','⇐','⇙','⇓','⇘']
+Game.Chars.OutlineArrows = ['⇨','⬀','⇧','⬁','⇦','⬃','','']
+Game.Chars.SolidArrows = ['➡','⬈','⬆','⬉','⬅','⬋','⬇','⬊']
+Game.Chars.ShieldArrows = ['','','','','','','','']

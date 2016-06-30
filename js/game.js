@@ -9,7 +9,7 @@ var Game = {
 	init: function() {
 
 		// Create display and append to page
-		this._display = new ROT.Display({fontFamily:'DejaVu-larrow',
+		this._display = new ROT.Display({fontFamily:'DejaVu-Custom',
 										 width:this._screenWidth,
 										 height:this._screenHeight});
 		document.body.appendChild(this._display.getContainer());
@@ -55,6 +55,13 @@ var Game = {
 	//Clear messages and unlock engine on "hard" player input
 	flushInput: function() { 
 		this._currentScreen.clearMessages();
+		this._currentScreen._map.getEngine().unlock();
+		//var boundUnlock = this.unlock.bind(this);
+		//setTimeout(boundUnlock, 500);
+	},
+	
+	unlock: function() {
+		console.log('unlocking');
 		this._currentScreen._map.getEngine().unlock();
 	},
 

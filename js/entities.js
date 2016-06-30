@@ -47,6 +47,11 @@ Game.RecklessChargerTemplate = {
 			 Game.Mixins.Attacker]
 }
 
+Game.ShieldBearerTemplate = {
+	name: 'Shield Bearer',
+	character: String.fromCharCode(0x2912)
+}
+
 //Preview entity
 Game.PreviewTemplate = {
 	name: "Preview",
