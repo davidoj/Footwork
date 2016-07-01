@@ -53,7 +53,8 @@ var Game = {
 		}
 	},
 	//Clear messages and unlock engine on "hard" player input
-	flushInput: function() { 
+	flushInput: function() {
+		this._currentScreen._player.takeNextAction(); //take one action from the queue
 		this._currentScreen.clearMessages();
 		this._currentScreen._map.getEngine().unlock();
 		//var boundUnlock = this.unlock.bind(this);

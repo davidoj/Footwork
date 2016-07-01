@@ -8,10 +8,26 @@ Game.Mixins = {};
 Game.Mixins.PlayerActor = {
 	name : 'PlayerActor',
 	groupName : 'Actor',
+	init : function() {
+		this._actions = [];
+	},
 	act : function() {
 		Game.refresh();
-		this.getMap().getEngine().lock();
-		console.log("Player moving");
+		if (!this.takeNextAction()) {
+			this.getMap().getEngine().lock();
+		}
+	},
+	takeNextAction : function() {
+		if (this._actions.length) {
+			var action = this._actions.pop();
+			action.call(this);
+			return true;
+		} else {
+			return false;
+		}
+	},
+	queueAction : function(action) {
+		this._actions.push(action);
 	},
 	getControl : function(ch) {
 		return this.controls[ch];
@@ -20,3 +36,6 @@ Game.Mixins.PlayerActor = {
 		this.controls = controls;
 	}
 }
+
+
+

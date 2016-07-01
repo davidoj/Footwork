@@ -52,3 +52,11 @@ Game.Mixins.ChargerActor = {
 		}
 	}
 }
+
+
+//Move to designated point
+
+// Game.Mixins.MoveToPoint = {
+// 	name: 'MoveToPoint',
+// 	groupName: 'Pathfinder',
+	

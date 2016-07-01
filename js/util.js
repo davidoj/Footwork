@@ -28,3 +28,12 @@ function d2v(direction) {
 function degree(dir1, dir2) {
 	return Math.max(0,mod(Math.abs(dir2-dir1),7)-1);
 }
+
+// Partial function application
+function partial(func /*, 0..n args */) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return function() {
+    var allArguments = args.concat(Array.prototype.slice.call(arguments));
+    return func.apply(this, allArguments);
+  };
+}

@@ -20,7 +20,7 @@ Game.Controls.fps = {
 			var ch = String.fromCharCode(inputData.keyCode);
 			var ctrl = this.dirMap[ch];
 			if (ctrl) {
-				actor.fpsMove(ctrl[0],ctrl[1],map);
+				actor.queueAction(partial(actor.fpsMove,ctrl[0],ctrl[1],map));
 				Game.flushInput();
 			} else if (ch == 'N') {
 				actor.readyNextAbility();
@@ -36,7 +36,7 @@ Game.Controls.fps = {
 		}
 
 		if (inputType == 'mousedown' && inputData.shiftKey) {
-			actor.useCurrentAbility();
+			actor.queueAction(partial(actor.useCurrentAbility));
 			Game.flushInput();
 		}
 		actor.clearPreviews();
