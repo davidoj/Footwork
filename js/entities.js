@@ -15,7 +15,8 @@ Game.PlayerTemplate = {
 			  Game.Mixins.Attacker,
 			  Game.Mixins.Destructible,
 			  Game.Mixins.MessageRecipient,
-			  Game.Mixins.PreviewSpawner]
+			  Game.Mixins.PreviewSpawner,
+			  Game.Mixins.WalkToPoint]
 }
 
 //Walk randomly, hit player if adjacent

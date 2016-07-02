@@ -5,7 +5,7 @@
 // Game.Mixins.AbsMoveable = {
 // 	name : 'AbsMoveable',
 // 	groupName : 'Moveable',
-// 	tryMove: function(x,y,map) {
+// 	tryMove: function(x,y) {
 // 		var tile = map.getTile(x,y);
 // 		if (tile.isWalkable() && !this._map.getEntityAt(x,y)) {
 // 			this._x = x;
@@ -82,6 +82,14 @@ Game.Mixins.DirectionMoveable = {
 	getChar : function() {
 		return this._chararray[this._direction];
 	},
+
+	canMoveTo : function(x,y) {
+	if (Math.max(Math.abs(this.getX()-x),Math.abs(this.getY()-y))>1) {
+		return false;
+	}
+		return this.canOccupy(x,y);
+	},
+	
 	turn : function(direction,temp) {
 		if (this._standing) {
 			this._direction = direction;
@@ -95,7 +103,7 @@ Game.Mixins.DirectionMoveable = {
 	},
 
 	// Move to position x, y, dir
-	tryMoveTo : function(x, y, rel_dir, final_dir, map) {
+	tryMoveTo : function(x, y, rel_dir, final_dir) {
 
 		if (this.canMoveTo(x,y)) {
 			// this.getMap().getEngine().lock();
@@ -120,8 +128,16 @@ Game.Mixins.DirectionMoveable = {
 		}
 		
 	},
+
+	tryAutoMoveTo : function(x,y) {
+		var dx = x-this.getX();
+		var dy = y-this.getY();
+		console.log("automove" + dx + ", " + dy);
+		var final_dir = v2d([dx,-dy]);
+		return this.tryMoveTo(x,y,0,final_dir);
+	},
 	
-	tryWait : function(final_dir, map) {
+	tryWait : function(final_dir) {
 		if (!this._standing) {
 			this.raiseEvent('onGetUp');
 		} else {
@@ -132,7 +148,7 @@ Game.Mixins.DirectionMoveable = {
 		return true;
 	},
 
-	fpsMove : function(dx,dy,map) {
+	fpsMove : function(dx,dy) {
 
 		if (dx == 0 && dy == 0) {
 			return this.tryWait(this._direction, this.getMap());
@@ -150,7 +166,7 @@ Game.Mixins.DirectionMoveable = {
 	},
 
 
-	kbMove: function(dx,dy,noturn,map) {
+	kbMove: function(dx,dy,noturn) {
 
 
 		if (this._turnMode) {

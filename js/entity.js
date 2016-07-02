@@ -40,11 +40,13 @@ Game.Entity.prototype.getMap = function() {
 
 //Get the number of steps to another entity, ignoring obstacles
 Game.Entity.prototype.getDist = function(entity) {
-	return Math.max(this.getX()-entity.getX()), Math.abs(this.getY()-entity.getY());
+	return Math.max(Math.abs(this.getX()-entity.getX()), Math.abs(this.getY()-entity.getY()));
 }
 
-Game.Entity.prototype.canMoveTo = function(x,y) {
+Game.Entity.prototype.canOccupy = function(x,y) {
+
 	var tile = this.getMap().getTile(x,y);
 	var target = this.getMap().getEntityAt(x,y);
+	
 	return (tile.isWalkable() && (!target || target == this));
 }

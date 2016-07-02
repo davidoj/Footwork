@@ -38,6 +38,10 @@ Game.Controls.fps = {
 		if (inputType == 'mousedown' && inputData.shiftKey) {
 			actor.queueAction(partial(actor.useCurrentAbility));
 			Game.flushInput();
+		} else if (inputType == 'mousedown') {
+			var pos = Game.getDisplay().eventToPosition(inputData);
+			actor.queueAction(partial(actor.tryWalkToPoint,pos[0],pos[1]));
+			Game.flushInput();
 		}
 		actor.clearPreviews();
 		if (shift) {

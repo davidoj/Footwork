@@ -54,9 +54,43 @@ Game.Mixins.ChargerActor = {
 }
 
 
-//Move to designated point
-
-// Game.Mixins.MoveToPoint = {
-// 	name: 'MoveToPoint',
-// 	groupName: 'Pathfinder',
-	
+//Walk to designated point
+Game.Mixins.WalkToPoint = {
+	name: 'MoveToPoint',
+	groupName: 'Pathfinder',
+	init : function() {
+		this._pathPreview = [];
+	},
+	clearPath : function() {
+		this._pathPreview = [];
+	},
+	addToPath : function(x,y) {
+		this._pathPreview.push([x,y]);
+	},
+	findPathToPoint : function(x,y) {
+		this.clearPath();
+		var path = new ROT.Path.AStar(x,y,this.canOccupy.bind(this));
+		path.compute(this.getX(),this.getY(),this.addToPath.bind(this));
+	},
+	tryWalkToPoint : function(x,y) {
+		var tile = this.getMap().getTile(x,y);
+		var disturb = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),5);
+		
+		if (!tile.isWalkable() || disturb.length > 1) {
+			Game.sendMessage(this,"Your journey is disturbed");
+			return false;
+		}
+		this.findPathToPoint(x,y);
+		console.log(this._pathPreview);
+		if (this._pathPreview.length) {
+			this.tryAutoMoveTo(this._pathPreview[1][0],this._pathPreview[1][1]);
+			if (this._pathPreview.length > 2) {
+				this.queueAction(partial(this.tryWalkToPoint,x,y));
+			}
+		} else {
+			return false;
+		}
+	}
+}
+		
+		
