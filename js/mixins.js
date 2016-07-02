@@ -20,8 +20,6 @@ Game.Mixins.PlayerActor = {
 		
 		if (!this.takeNextAction()) {
 			this.getMap().getEngine().lock();
-		} else {
-			Game.refresh();
 		}
 	},
 	takeNextAction : function() {
