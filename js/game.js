@@ -57,12 +57,9 @@ var Game = {
 		this._currentScreen._player.takeNextAction(); //take one action from the queue
 		this._currentScreen.clearMessages();
 		this._currentScreen._map.getEngine().unlock();
-		//var boundUnlock = this.unlock.bind(this);
-		//setTimeout(boundUnlock, 500);
 	},
 	
 	unlock: function() {
-		console.log('unlocking');
 		this._currentScreen._map.getEngine().unlock();
 	},
 

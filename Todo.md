@@ -1,6 +1,5 @@
 #To do list
 
-	* Click to move
 	* Dungeon generator
 	* Screen scrolling
 	* Multiple weapons

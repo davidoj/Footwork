@@ -12,9 +12,16 @@ Game.Mixins.PlayerActor = {
 		this._actions = [];
 	},
 	act : function() {
+
 		Game.refresh();
+		var boundUnlock = Game.unlock.bind(Game);
+		this.getMap().getEngine().lock();
+		setTimeout(boundUnlock, 50);
+		
 		if (!this.takeNextAction()) {
 			this.getMap().getEngine().lock();
+		} else {
+			Game.refresh();
 		}
 	},
 	takeNextAction : function() {
