@@ -96,10 +96,8 @@ Game.Mixins.DirectionMoveable = {
 
 	// Move to position x, y, dir
 	tryMoveTo : function(x, y, rel_dir, final_dir, map) {
-		var tile = map.getTile(x,y);
-		var target = this._map.getEntityAt(x,y);
 
-		if (tile.isWalkable() && (!target || target == this)) {
+		if (this.canMoveTo(x,y)) {
 			// this.getMap().getEngine().lock();
 			// var unlock;
 			// unlock = this.getMap().getEngine().unlock;
@@ -124,9 +122,13 @@ Game.Mixins.DirectionMoveable = {
 	},
 	
 	tryWait : function(final_dir, map) {
-		this.raiseEvent('onAction',-2);
-		this._direction = final_dir;
-		this._olddirection = final_dir;
+		if (!this._standing) {
+			this.raiseEvent('onGetUp');
+		} else {
+			this.raiseEvent('onAction',-2);
+			this._direction = final_dir;
+			this._olddirection = final_dir;
+		}
 		return true;
 	},
 

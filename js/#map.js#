@@ -71,12 +71,6 @@ Game.Map.prototype.getEntitiesWithinRadius = function(centerX, centerY, radius) 
     return results;
 }
 
-Game.Map.prototype.canMoveTo = function(entity,x,y) {
-	var tile = this.getTile(x,y);
-	var target = this.getEntityAt(x,y);
-	return (tile.isWalkable() && (!target || target == entity));
-}
-
 Game.Map.prototype.addEntity = function (entity) {
 	
 	if ('_x' in entity) {

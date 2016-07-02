@@ -42,3 +42,9 @@ Game.Entity.prototype.getMap = function() {
 Game.Entity.prototype.getDist = function(entity) {
 	return Math.max(this.getX()-entity.getX()), Math.abs(this.getY()-entity.getY());
 }
+
+Game.Entity.prototype.canMoveTo = function(x,y) {
+	var tile = this.getMap().getTile(x,y);
+	var target = this.getMap().getEntityAt(x,y);
+	return (tile.isWalkable() && (!target || target == this));
+}
