@@ -1,10 +1,24 @@
 #To do list
 
 	* Dungeon generator
-	* Screen scrolling
-	* Multiple weapons
+	* Levels
+	* Monster spawns
+	* Inventory
+	* Movement tutorial
+	* Message for falling monsters
+	
+	* Post for feedback
+	
+	* Fix charge preview
+	* Field of view
+	* Tile highlight for fallen creatures
+	* Tile highlight for temporary turns
+	* More monsters
+	* More abilities
+	
+	
 	* Advanced AI
-	* Animations
+	* Animations?
 	  ** Health down
 	  ** Hit
 	  ** Balance down
@@ -13,29 +27,24 @@
 
 #Bugs
 
-	* Wonky character spacing in Firefox
-	* Wonky character spacing in general
+
 	* Why does the font change on first load?
 	* Message order is not always sensible
+	* Wonky character spacing 
+		** Text looks weird, dungeon looks OK. Don't know how to force non-square ratio; 
+			would also need to edit font. Low priority.
 	
-## Control, Attack, Defense
 
-Ideas:
+### New abilities
+
+	* Set to parry: protect from a particular direction; 
+		** costs 1 balance to move
+		** does 1 balance damage to parried enemy
+	* Set evade: leap backwards when enemy attacks
+	    ** Leap takes 2 balance; 5 balance if into wall
+	* Shieldbearer attacks lower shields for 1 turn 
+		** maybe also have tower shield bearers without this restriction
 
 
-### Click to move
 
-	* Interacts well with mouse-to-face
-	* Good way to travel
-	* Multiple ways to control seems a bit inelegant
-
-### Attacking and defending
-
-Need abilities to make it interesting:
-
-	* Shield bearers: always protected from one direction
-	* Set parry: protect from a particular direction; costs 1 balance to move
-	* Charge: move and attack in same turn; costs 3 balance
-
-Balance costs for tactical engagements
 

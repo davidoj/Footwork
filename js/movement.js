@@ -132,9 +132,7 @@ Game.Mixins.DirectionMoveable = {
 	tryAutoMoveTo : function(x,y) {
 		var dx = x-this.getX();
 		var dy = y-this.getY();
-		console.log("automove" + dx + ", " + dy);
 		var final_dir = v2d(dx,-dy);
-		console.log(final_dir);
 		return this.tryMoveTo(x,y,0,final_dir);
 	},
 	

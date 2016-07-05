@@ -155,7 +155,8 @@ Game.Screen.footworkScreen =  {
 		
 		var disp_bal = this._player._cbal;
 
-		display.drawText(hudHPx,hudHPy, vsprintf("Health:  %i/%i",[this._player._chp,this._player._mhp]));
+		display.drawText(hudHPx,hudHPy, vsprintf("Health:  %i/%i",
+												 [this._player._chp,this._player._mhp]));
 		display.drawText(hudBALx, hudBALy, vsprintf("Balance: %i/%i",[disp_bal,this._player._mbal]));
 		display.drawText(hudABLx, hudABLy, vsprintf("Attack: %s",[this._player._currentability]));
 

@@ -11,7 +11,9 @@ var Game = {
 		// Create display and append to page
 		this._display = new ROT.Display({fontFamily:'DejaVu-Custom',
 										 width:this._screenWidth,
-										 height:this._screenHeight});
+										 height:this._screenHeight,
+										 fontSize:18,
+										 forceSquareRatio:true});
 		document.body.appendChild(this._display.getContainer());
 
 		var game = this;

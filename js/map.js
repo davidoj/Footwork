@@ -4,6 +4,7 @@ Game.Map = function(tiles, player) {
 	this._tiles = tiles;
 	this._width = tiles.length;
 	this._height = tiles[0].length;
+	this._level = 0;
 	
 	this._entities = [];
 	this._animations = [];
@@ -26,6 +27,28 @@ Game.Map.prototype.getWidth = function() {
 
 Game.Map.prototype.getHeight = function() {
 	return this._height;
+}
+
+Game.Map.prototype.getLevel = function() {
+	return this._level;
+}
+
+Game.Map.prototype.tryIncreaseLevel = function() {
+	if (this._level <=5) {
+		this._level = this._level+1;
+		return true;
+	} else {
+		this._level = 5;
+		return false;
+	}
+}
+
+Game.Map.prototype.addEnemy = function() {
+	var enemy_lists = [[Game.ConfusedWandererTemplate],
+					   [Game.ConfusedWandererTemplate,Game.RecklessChargerTemplate],
+					   [Game.ConfusedWandererTemplate,Game.RecklessChargerTemplate,
+						Game.ShieldBearerTemplate]];
+	var enemies = enemy_lists[this._level];
 }
 
 Game.Map.prototype.getTile = function(x,y) {
