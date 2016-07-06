@@ -105,6 +105,8 @@ Game.Screen.footworkScreen =  {
 		for (var z = 0; z < mapDepth; z++) {
 			var upstair = false;
 			var downstair = false;
+			var upstairs = [];
+			var downstairs = []
 			
 			var mapCallback = partial(mapCallbackZ,z);
 			generator.create(mapCallback);		
@@ -115,6 +117,7 @@ Game.Screen.footworkScreen =  {
 				if (map[z][upx][upy] === Game.Tile.floorTile) {
 					map[z][upx][upy] = Game.Tile.upStairTile;
 					upstair = true;
+					upstairs.push([upx,upy]);
 				}
 			}
 			while (!downstair) {
@@ -123,11 +126,12 @@ Game.Screen.footworkScreen =  {
 				if (map[z][downx][downy] === Game.Tile.floorTile) {
 					map[z][downx][downy] = Game.Tile.downStairTile;
 					downstair = true;
+					downstairs.push([downx,downy]);
 				}
 			}
 		}
 		
-		this._map = new Game.Map(map, this._player);
+		this._map = new Game.Map(map, this._player, upstairs, downstairs);
 
 	},
 

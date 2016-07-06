@@ -13,6 +13,7 @@ Game.Mixins.PreviewSpawner = {
 		prev.setChar(ch);
 		prev.setX(x);
 		prev.setY(y);
+		prev.setZ(this.getZ());
 		this.getMap().addEntity(prev);
 		this._previews.push(prev);
 	},

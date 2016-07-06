@@ -1,6 +1,6 @@
 
 
-Game.Map = function(tiles, player) {
+Game.Map = function(tiles, player, upstairs, downstairs) {
 	this._tiles = tiles;
 	this._width = tiles[0].length;
 	this._height = tiles[0][0].length;
@@ -12,13 +12,26 @@ Game.Map = function(tiles, player) {
 	this._scheduler = new ROT.Scheduler.Simple();
 	this._engine = new ROT.Engine(this._scheduler);
 
+	this._upstairs = upstairs;
+	this._downstairs = downstairs;
+
 	this.addEntity(player);
-	
-	for (i=0;i<1;i++) {
-		this.addEntityAtRandomPosition(new Game.Entity(Game.ConfusedWandererTemplate));
-		this.addEntityAtRandomPosition(new Game.Entity(Game.RecklessChargerTemplate));
-		this.addEntityAtRandomPosition(new Game.Entity(Game.ShieldBearerTemplate));
+	player.setX(upstairs[0][0]);
+	player.setY(upstairs[0][1]);
+
+	for (z=0; z<this._depth; z++) {
+		for (i=0; i<3; i++) {
+			this.addRandomEnemy(z);
+		}
 	}
+}
+
+Game.Map.prototype.getUpstairs = function() {
+	return this._upstairs[this._level];
+}
+
+Game.Map.prototype.getDownstairs = function() {
+	return this._downstairs[this._level];
 }
 
 Game.Map.prototype.getWidth = function() {
@@ -134,8 +147,12 @@ Game.Map.prototype.addEntity = function (entity) {
 	}
 }
 
-Game.Map.prototype.addEntityAtRandomPosition = function (entity) {
+Game.Map.prototype.addEntityAtRandomPosition = function (entity,z) {
 
+	if (typeof z == "undefined") {
+		z = this._level;
+	}
+	
 	var valid = false;
 	while (!valid) {
 		var x = Math.floor(this._width*Math.random());
@@ -144,17 +161,25 @@ Game.Map.prototype.addEntityAtRandomPosition = function (entity) {
 	}
 	entity.setX(x);
 	entity.setY(y);
+	entity.setZ(z);
 	this.addEntity(entity);
 }
 
-Game.Map.prototype.addRandomEnemy = function() {
+Game.Map.prototype.addRandomEnemy = function(z) {
+
+	if (typeof z == "undefined") {
+		z = this._level;
+	}
+
+	var idx = Math.min(z,2);
+	
 	var enemy_lists = [[Game.ConfusedWandererTemplate],
 					   [Game.ConfusedWandererTemplate,Game.RecklessChargerTemplate],
 					   [Game.ConfusedWandererTemplate,Game.RecklessChargerTemplate,
 						Game.ShieldBearerTemplate]];
-	var enemies = enemy_lists[this._level];
+	var enemies = enemy_lists[idx];
 	var choice = Math.floor(Math.random()*enemies.length);
-	this.addEntityAtRandomPosition(new Game.Entity(enemies[choice]));
+	this.addEntityAtRandomPosition(new Game.Entity(enemies[choice]),z);
 }
 
 Game.Map.prototype.removeEntity = function (entity) {

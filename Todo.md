@@ -1,11 +1,11 @@
 #To do list
 
-	* Dungeon generator
-	* Levels
+
 	* Monster spawns
 	* Inventory
 	* Movement tutorial
 	* Message for falling monsters
+	* Dungeon generator
 	
 	* Post for feedback
 	
