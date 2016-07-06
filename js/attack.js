@@ -58,7 +58,7 @@ Game.Mixins.Attacker = {
 		this.raiseEvent('onAction',ability.balance_cost);
 		
 		for (i=0; i<targets.length; i++) {
-			target = this.getMap().getEntityAt(targets[i][0],targets[i][1]);
+			target = this.getMap().getEntityAt(targets[i][0],targets[i][1],this.getZ());
 			if (target && target.hasMixin('Destructible')) {
 
 				if (target.hasMixin('Shielded')) {
@@ -66,7 +66,7 @@ Game.Mixins.Attacker = {
 					for (var j=0; j<prot.length; j++) {
 						console.log('prot: ' + prot[j][0] + ', ' + prot[j][1]);
 						console.log('this: ' + this.getX() + ', ' + this.getY());
-						if (target.getMap().getEntityAt(prot[j][0],prot[j][1])==this) {
+						if (target.getMap().getEntityAt(prot[j][0],prot[j][1],target.getZ())==this) {
 							doMessage = "Your hopeful strike glances of the %s's shield";
 							takeMessage = "The %s fiercely strikes your shield with furious determination";
 							damage = 0;

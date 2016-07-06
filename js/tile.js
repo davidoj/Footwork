@@ -23,3 +23,13 @@ Game.Tile.floorTile = new Game.Tile({
 Game.Tile.wallTile = new Game.Tile({
 	character: '#',
 });
+
+Game.Tile.downStairTile = new Game.Tile({
+	character: '>',
+	walkable: true
+});
+
+Game.Tile.upStairTile = new Game.Tile({
+	character: '<',
+	walkable: true
+});

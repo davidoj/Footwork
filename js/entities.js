@@ -7,6 +7,8 @@ Game.PlayerTemplate = {
 	background : 'black',
 	playercontrolled : true,
 	mhp : 2,
+	x:2,
+	y:2,
 	abilities: [Game.Attacks.ChargeAttack, Game.Attacks.SweepAttack],
 	chararray: Game.Chars.SingleArrows,
 	mixins : [Game.Mixins.Balanced,
@@ -16,7 +18,8 @@ Game.PlayerTemplate = {
 			  Game.Mixins.Destructible,
 			  Game.Mixins.MessageRecipient,
 			  Game.Mixins.PreviewSpawner,
-			  Game.Mixins.WalkToPoint]
+			  Game.Mixins.WalkToPoint,
+			  Game.Mixins.StairClimber]
 }
 
 //Walk randomly, hit player if adjacent

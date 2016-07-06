@@ -1,25 +1,5 @@
 //Movement mixins
 
-//Entity can move to unblocked squares
-//Takes argument in absolute coordinates to current position
-// Game.Mixins.AbsMoveable = {
-// 	name : 'AbsMoveable',
-// 	groupName : 'Moveable',
-// 	tryMove: function(x,y) {
-// 		var tile = map.getTile(x,y);
-// 		if (tile.isWalkable() && !this._map.getEntityAt(x,y)) {
-// 			this._x = x;
-// 			this._y = y;
-
-// 			if (this._playercontrolled) {
-// 				this.getMap().getEngine().unlock();
-// 			}
-
-// 			return true;
-// 		}
-// 		else { return false;}
-// 	}
-// };
 
 //Balance statistic that governs whether various actions can be used
 Game.Mixins.Balanced = {
@@ -203,3 +183,31 @@ Game.Mixins.DirectionMoveable = {
 
 	}
 };
+
+
+// Go up/down stairs
+Game.Mixins.StairClimber = {
+	name : 'StairClimber',
+	group : 'StairClimber',
+	goToNextLevel : function() {
+		var tile = this.getMap().getTile(this.getX(),this.getY());
+		if (tile == Game.Tile.downStairTile) {
+			if (this.getMap().tryIncreaseLevel()) {
+				this.setZ(this.getMap().getLevel());
+				return true;
+			}
+		}
+	},
+	goToPreviousLevel : function() {
+		var tile = this.getMap().getTile(this.getX(),this.getY());
+		if ( tile == Game.Tile.upStairTile) {
+			if (this.getMap().tryDecreaseLevel()) {
+				this.setZ(this.getMap().getLevel());
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+}
+		

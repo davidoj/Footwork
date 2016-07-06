@@ -7,8 +7,7 @@ Game.Mixins.RandomWalkerActor = {
 	name : 'MonsterActor',
 	groupName : 'NPActor',
 	act : function() {
-		console.log("Random walker moving");
-		var ents = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),1);
+		var ents = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),1,this.getZ());
 		for (var i=0;i<ents.length;i++) {
 			if (ents[i].hasMixin('PlayerActor')) {
 				var final_dir = v2d(ents[i].getX()-this.getX(),-(ents[i].getY()-this.getY()));
@@ -33,10 +32,10 @@ Game.Mixins.ChargerActor = {
 	name: 'ChargerActor',
 	groupName: 'NPActor',
 	act: function() {
-		console.log("Reckless charger moving");
-		var ents = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),6);
+		var ents = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),6,this.getZ());
 		for (var i=0;i<ents.length;i++) {
 			if (ents[i].hasMixin('PlayerActor')) {
+				//console.log(this.getZ() + ' ' + ents[i].getZ());
 				var final_dir = v2d(ents[i].getX()-this.getX(),-(ents[i].getY()-this.getY()));
 				if (this.getDist(ents[i]) == 1) {
 					if (this._direction == final_dir) {
@@ -74,15 +73,14 @@ Game.Mixins.WalkToPoint = {
 	},
 	tryWalkToPoint : function(x,y) {
 		var tile = this.getMap().getTile(x,y);
-		var disturb = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),5);
+		var disturb = this.getMap().getEntitiesWithinRadius(this.getX(),this.getY(),5,this.getZ());
 		
 		if (!tile.isWalkable() || disturb.length > 1) {
 			Game.sendMessage(this,"Your journey is disturbed");
 			return false;
 		}
 		this.findPathToPoint(x,y);
-		console.log(this._pathPreview);
-		if (this._pathPreview.length) {
+		if (this._pathPreview.length >= 2) {
 			this.tryAutoMoveTo(this._pathPreview[1][0],this._pathPreview[1][1]);
 			if (this._pathPreview.length > 2) {
 				this.queueAction(partial(this.tryWalkToPoint,x,y));

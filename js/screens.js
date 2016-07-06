@@ -79,27 +79,54 @@ Game.Screen.footworkScreen =  {
 	_generateMap: function() {
 		var mapWidth = 50;
 		var mapHeight = 24;
+		var mapDepth = 5;
 		var generator = new ROT.Map.Arena(mapWidth, mapHeight);
 		var map = [];
 
-		for (var x = 0; x < mapWidth; x++) {
-            map.push([]);
-            for (var y = 0; y < mapHeight; y++) {
-                map[x].push(Game.Tile.nullTile);
-            }
-        }
-	
-
-		var mapCallback = function (x,y,value) {
+		for (var z = 0; z < mapDepth; z++) {
+			map.push([]);
+			for (var x = 0; x < mapWidth; x++) {
+				map[z].push([]);
+				for (var y = 0; y < mapHeight; y++) {
+					map[z][x].push(Game.Tile.nullTile);
+				}
+			}
+		}
+		
+		var mapCallbackZ = function (z,x,y,value) {
 			if (value === 1) {
-				map[x][y] = Game.Tile.wallTile;
+				map[z][x][y] = Game.Tile.wallTile;
 			}
 			else {
-				map[x][y] = Game.Tile.floorTile;
+				map[z][x][y] = Game.Tile.floorTile;
 			}
 		}
 
-		generator.create(mapCallback);
+		for (var z = 0; z < mapDepth; z++) {
+			var upstair = false;
+			var downstair = false;
+			
+			var mapCallback = partial(mapCallbackZ,z);
+			generator.create(mapCallback);		
+
+			while (!upstair) {
+				var upx = Math.floor(Math.random()*mapWidth/2);
+				var upy = Math.floor(Math.random()*mapHeight);
+				if (map[z][upx][upy] === Game.Tile.floorTile) {
+					map[z][upx][upy] = Game.Tile.upStairTile;
+					upstair = true;
+				}
+			}
+			while (!downstair) {
+				var downx = Math.floor(Math.random()*mapWidth/2 + mapWidth/2);
+				var downy = Math.floor(Math.random()*mapHeight);
+				if (map[z][downx][downy] === Game.Tile.floorTile) {
+					map[z][downx][downy] = Game.Tile.downStairTile;
+					downstair = true;
+				}
+			}
+		}
+		
 		this._map = new Game.Map(map, this._player);
 
 	},
@@ -140,10 +167,12 @@ Game.Screen.footworkScreen =  {
 		//Draw entities
 		for (var i = 0; i<entities.length; i++) {
 			var entity = entities[i];
-			display.draw(entity.getX(), entity.getY(),
-						 entity.getChar(), 
-						 entity.getForeground(),
-						 entity.getBackground());
+			if (entity.getZ() == this._map._level) {
+				display.draw(entity.getX(), entity.getY(),
+							 entity.getChar(), 
+							 entity.getForeground(),
+							 entity.getBackground());
+			}
 		}
 
 		var hudHPx = this._map.getWidth() + this._hudHPoffset[0];

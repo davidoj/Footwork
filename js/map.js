@@ -2,8 +2,9 @@
 
 Game.Map = function(tiles, player) {
 	this._tiles = tiles;
-	this._width = tiles.length;
-	this._height = tiles[0].length;
+	this._width = tiles[0].length;
+	this._height = tiles[0][0].length;
+	this._depth = tiles.length;
 	this._level = 0;
 	
 	this._entities = [];
@@ -11,14 +12,13 @@ Game.Map = function(tiles, player) {
 	this._scheduler = new ROT.Scheduler.Simple();
 	this._engine = new ROT.Engine(this._scheduler);
 
-	this.addEntityAtRandomPosition(player);
+	this.addEntity(player);
 	
 	for (i=0;i<1;i++) {
 		this.addEntityAtRandomPosition(new Game.Entity(Game.ConfusedWandererTemplate));
 		this.addEntityAtRandomPosition(new Game.Entity(Game.RecklessChargerTemplate));
 		this.addEntityAtRandomPosition(new Game.Entity(Game.ShieldBearerTemplate));
 	}
-
 }
 
 Game.Map.prototype.getWidth = function() {
@@ -29,12 +29,16 @@ Game.Map.prototype.getHeight = function() {
 	return this._height;
 }
 
+Game.Map.prototype.getDepth = function() {
+	return this._depth;
+}
+
 Game.Map.prototype.getLevel = function() {
 	return this._level;
 }
 
 Game.Map.prototype.tryIncreaseLevel = function() {
-	if (this._level <=5) {
+	if (this._level < 5) {
 		this._level = this._level+1;
 		return true;
 	} else {
@@ -43,20 +47,26 @@ Game.Map.prototype.tryIncreaseLevel = function() {
 	}
 }
 
-Game.Map.prototype.addEnemy = function() {
-	var enemy_lists = [[Game.ConfusedWandererTemplate],
-					   [Game.ConfusedWandererTemplate,Game.RecklessChargerTemplate],
-					   [Game.ConfusedWandererTemplate,Game.RecklessChargerTemplate,
-						Game.ShieldBearerTemplate]];
-	var enemies = enemy_lists[this._level];
+Game.Map.prototype.tryDecreaseLevel = function() {
+	if (this._level > 0) {
+		this._level = this._level-1;
+		return true;
+	} else {
+		this._level = 0;
+		return false;
+	}
 }
 
-Game.Map.prototype.getTile = function(x,y) {
+
+Game.Map.prototype.getTile = function(x,y,z) {
+	if (typeof z == "undefined") {
+		z = this._level;
+	}
 	if (x < 0 || x >= this._width || y<0 || y >= this._height) {
 		return Game.Tile.nullTile;
 	} 
 	else {
-		return this._tiles[x][y] || Game.Tile.nullTile;
+		return this._tiles[z][x][y] || Game.Tile.nullTile;
 	}
 }
 
@@ -68,17 +78,27 @@ Game.Map.prototype.getEntities = function() {
 	return this._entities;
 }
 
-Game.Map.prototype.getEntityAt = function(x,y) {
+Game.Map.prototype.getEntityAt = function(x,y,z) {
+	if (typeof z == "undefined") {
+		z = this._level;
+	}
 	for (var i=0; i < this._entities.length; i++) {
-		if (this._entities[i].getX() == x && this._entities[i].getY() == y) {
+		if (this._entities[i].getX() == x &&
+			this._entities[i].getY() == y &&
+			this._entities[i].getZ() == z) {
 			return this._entities[i]
 		}
 	}
 	return false;
 }
 
-Game.Map.prototype.getEntitiesWithinRadius = function(centerX, centerY, radius) {
+Game.Map.prototype.getEntitiesWithinRadius = function(centerX, centerY, radius, centerZ) {
     results = [];
+	if (typeof centerZ == "undefined") {
+		var z = this._level
+	} else {
+		var z = centerZ;
+	}
     var leftX = centerX - radius;
     var rightX = centerX + radius;
     var topY = centerY - radius;
@@ -87,7 +107,9 @@ Game.Map.prototype.getEntitiesWithinRadius = function(centerX, centerY, radius) 
         if (this._entities[i].getX() >= leftX &&
             this._entities[i].getX() <= rightX && 
             this._entities[i].getY() >= topY &&
-            this._entities[i].getY() <= bottomY) {
+            this._entities[i].getY() <= bottomY &&
+			this._entities[i].getZ() === z) {
+			console.log(z + ' ' + this._entities[i].getZ());
             results.push(this._entities[i]);
         }
     }
@@ -123,6 +145,16 @@ Game.Map.prototype.addEntityAtRandomPosition = function (entity) {
 	entity.setX(x);
 	entity.setY(y);
 	this.addEntity(entity);
+}
+
+Game.Map.prototype.addRandomEnemy = function() {
+	var enemy_lists = [[Game.ConfusedWandererTemplate],
+					   [Game.ConfusedWandererTemplate,Game.RecklessChargerTemplate],
+					   [Game.ConfusedWandererTemplate,Game.RecklessChargerTemplate,
+						Game.ShieldBearerTemplate]];
+	var enemies = enemy_lists[this._level];
+	var choice = Math.floor(Math.random()*enemies.length);
+	this.addEntityAtRandomPosition(new Game.Entity(enemies[choice]));
 }
 
 Game.Map.prototype.removeEntity = function (entity) {

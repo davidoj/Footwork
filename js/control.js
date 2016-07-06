@@ -24,6 +24,10 @@ Game.Controls.fps = {
 				Game.flushInput();
 			} else if (ch == 'N') {
 				actor.readyNextAbility();
+			} else if (shift && inputData.keyCode == ROT.VK_COMMA) {
+				actor.goToPreviousLevel();
+			} else if (shift && inputData.keyCode == ROT.VK_PERIOD) {
+				actor.goToNextLevel();
 			}
 		}
 
@@ -35,7 +39,7 @@ Game.Controls.fps = {
 			}			
 		}
 
-		if (inputType == 'mousedown' && inputData.shiftKey) {
+		if (inputType == 'mousedown' && shift) {
 			actor.queueAction(partial(actor.useCurrentAbility));
 			Game.flushInput();
 		} else if (inputType == 'mousedown') {
